@@ -1,0 +1,6 @@
+framework module Pods_HGImagePickerControllerTests {
+  umbrella header "Pods-HGImagePickerControllerTests-umbrella.h"
+
+  export *
+  module * { export * }
+}
