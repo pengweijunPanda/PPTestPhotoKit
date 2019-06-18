@@ -9,6 +9,7 @@
 #import "ViewController.h"
 #import "UIViewController+Image.h"
 #import "TZImagePickerController.h"
+#import "HGImageManager.h"
 
 @interface ViewController ()<UIViewControllerImagePickerDelegate>
 - (IBAction)album:(id)sender;
@@ -25,9 +26,8 @@
 
 
 - (IBAction)album:(id)sender {
-    [self presentAblumViewControllerWithAnimated:YES completion:^{
-        
-    }];
+    [HGImageManager manager].weakVC = self;
+    [[HGImageManager manager] showAlbumList];
 }
 
 - (IBAction)camera:(id)sender {

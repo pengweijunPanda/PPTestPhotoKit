@@ -18,6 +18,9 @@
 		2E470BE022B8C97D00D95F2E /* HGImagePickerControllerUITests.m in Sources */ = {isa = PBXBuildFile; fileRef = 2E470BDF22B8C97D00D95F2E /* HGImagePickerControllerUITests.m */; };
 		2EBC746E22B90167009D8030 /* UIViewController+Image.m in Sources */ = {isa = PBXBuildFile; fileRef = 2EBC746A22B90166009D8030 /* UIViewController+Image.m */; };
 		2EBC746F22B90167009D8030 /* HGImageManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 2EBC746C22B90166009D8030 /* HGImageManager.m */; };
+		2EBC747222B90929009D8030 /* HGAssetModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 2EBC747022B90929009D8030 /* HGAssetModel.m */; };
+		2EBC747522B90AA8009D8030 /* HGImageHelper.m in Sources */ = {isa = PBXBuildFile; fileRef = 2EBC747422B90AA8009D8030 /* HGImageHelper.m */; };
+		2EBC747822B912CE009D8030 /* HGAlbumListVC.m in Sources */ = {isa = PBXBuildFile; fileRef = 2EBC747722B912CE009D8030 /* HGAlbumListVC.m */; };
 		7165CA8F292EB8AD03DE8988 /* Pods_HGImagePickerControllerTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BF998C5BD3E5736DA24227C5 /* Pods_HGImagePickerControllerTests.framework */; };
 		78C5D250E7B8E21C248B7D9C /* Pods_HGImagePickerController.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 91AEAFBBAD8D4A632DD7CD22 /* Pods_HGImagePickerController.framework */; };
 		92D79BECEA54751A045C7CDB /* Pods_HGImagePickerControllerUITests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 19A3BC295DA4429EFF8F7BBA /* Pods_HGImagePickerControllerUITests.framework */; };
@@ -64,6 +67,12 @@
 		2EBC746B22B90166009D8030 /* HGImageManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HGImageManager.h; sourceTree = "<group>"; };
 		2EBC746C22B90166009D8030 /* HGImageManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HGImageManager.m; sourceTree = "<group>"; };
 		2EBC746D22B90166009D8030 /* UIViewController+Image.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIViewController+Image.h"; sourceTree = "<group>"; };
+		2EBC747022B90929009D8030 /* HGAssetModel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HGAssetModel.m; sourceTree = "<group>"; };
+		2EBC747122B90929009D8030 /* HGAssetModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HGAssetModel.h; sourceTree = "<group>"; };
+		2EBC747322B90AA8009D8030 /* HGImageHelper.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = HGImageHelper.h; sourceTree = "<group>"; };
+		2EBC747422B90AA8009D8030 /* HGImageHelper.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = HGImageHelper.m; sourceTree = "<group>"; };
+		2EBC747622B912CE009D8030 /* HGAlbumListVC.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = HGAlbumListVC.h; sourceTree = "<group>"; };
+		2EBC747722B912CE009D8030 /* HGAlbumListVC.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = HGAlbumListVC.m; sourceTree = "<group>"; };
 		2FE4622FBF6E85F6E0E9FB11 /* Pods-HGImagePickerController.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-HGImagePickerController.release.xcconfig"; path = "Target Support Files/Pods-HGImagePickerController/Pods-HGImagePickerController.release.xcconfig"; sourceTree = "<group>"; };
 		610ED814C40AFC4ADF2922F2 /* Pods-HGImagePickerController.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-HGImagePickerController.debug.xcconfig"; path = "Target Support Files/Pods-HGImagePickerController/Pods-HGImagePickerController.debug.xcconfig"; sourceTree = "<group>"; };
 		64E320A67EBFB90521395F93 /* Pods-HGImagePickerControllerUITests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-HGImagePickerControllerUITests.debug.xcconfig"; path = "Target Support Files/Pods-HGImagePickerControllerUITests/Pods-HGImagePickerControllerUITests.debug.xcconfig"; sourceTree = "<group>"; };
@@ -162,10 +171,16 @@
 		2EBC746922B90166009D8030 /* Classes */ = {
 			isa = PBXGroup;
 			children = (
+				2EBC746D22B90166009D8030 /* UIViewController+Image.h */,
 				2EBC746A22B90166009D8030 /* UIViewController+Image.m */,
 				2EBC746B22B90166009D8030 /* HGImageManager.h */,
 				2EBC746C22B90166009D8030 /* HGImageManager.m */,
-				2EBC746D22B90166009D8030 /* UIViewController+Image.h */,
+				2EBC747622B912CE009D8030 /* HGAlbumListVC.h */,
+				2EBC747722B912CE009D8030 /* HGAlbumListVC.m */,
+				2EBC747322B90AA8009D8030 /* HGImageHelper.h */,
+				2EBC747422B90AA8009D8030 /* HGImageHelper.m */,
+				2EBC747122B90929009D8030 /* HGAssetModel.h */,
+				2EBC747022B90929009D8030 /* HGAssetModel.m */,
 			);
 			path = Classes;
 			sourceTree = "<group>";
@@ -416,8 +431,11 @@
 				2EBC746F22B90167009D8030 /* HGImageManager.m in Sources */,
 				2EBC746E22B90167009D8030 /* UIViewController+Image.m in Sources */,
 				2E470BBD22B8C97C00D95F2E /* ViewController.m in Sources */,
+				2EBC747222B90929009D8030 /* HGAssetModel.m in Sources */,
+				2EBC747522B90AA8009D8030 /* HGImageHelper.m in Sources */,
 				2E470BBA22B8C97C00D95F2E /* AppDelegate.m in Sources */,
 				2E470BCB22B8C97D00D95F2E /* main.m in Sources */,
+				2EBC747822B912CE009D8030 /* HGAlbumListVC.m in Sources */,
 				2E470BC322B8C97C00D95F2E /* HGImagePickerController.xcdatamodeld in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
