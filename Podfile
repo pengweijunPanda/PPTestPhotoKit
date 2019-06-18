@@ -5,8 +5,8 @@ target 'HGImagePickerController' do
   # Comment the next line if you don't want to use dynamic frameworks
   use_frameworks!
 
-pod 'TZImagePickerController' #iOS8 and later
  #pod 'TZImagePickerController', '2.2.6' #iOS6、iOS7
+ pod 'YYKit'
 
   # Pods for HGImagePickerController
 

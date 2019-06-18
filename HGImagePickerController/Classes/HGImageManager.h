@@ -1,57 +1,126 @@
 //
-//  HGImageManager.h
+//  TZImageManager.h
 //  HGImagePickerController
 //
 //  Created by pengweijun on 2019/6/18.
 //  Copyright © 2019年 彭伟军. All rights reserved.
-//
+//  图片资源获取管理类
 
 #import <Foundation/Foundation.h>
-
-#import "UIViewController+Image.h"
-
 #import <UIKit/UIKit.h>
 #import <AVFoundation/AVFoundation.h>
 #import <Photos/Photos.h>
 #import "HGAssetModel.h"
 
-NS_ASSUME_NONNULL_BEGIN
-
+@class HGAlbumModel,HGAssetModel;
+@protocol HGImagePickerControllerDelegate;
 @interface HGImageManager : NSObject
 
-@property (weak, nonatomic) id<UIViewControllerImagePickerDelegate> pickerDelegate;
+@property (nonatomic, strong) PHCachingImageManager *cachingImageManager;
 
-@property (weak, nonatomic) UIViewController *weakVC;
++ (instancetype)manager NS_SWIFT_NAME(default());
++ (void)deallocManager;
 
-+ (instancetype)manager ;
+@property (weak, nonatomic) id<HGImagePickerControllerDelegate> pickerDelegate;
 
-- (void)showAlbumList;
+@property (nonatomic, assign) BOOL shouldFixOrientation;
 
-- (void)getAssetsFromFetchResult:(PHFetchResult *)result completion:(void (^)(NSArray<HGAssetModel *> *))completion;
+@property (nonatomic, assign) BOOL isPreviewNetworkImage;
 
-- (void)getCameraRollAlbum:(BOOL)allowPickingVideo
-         allowPickingImage:(BOOL)allowPickingImage
-           needFetchAssets:(BOOL)needFetchAssets
-                completion:(void (^)(HGAlbumModel *model))completion;
+/// Default is 600px / 默认600像素宽
+@property (nonatomic, assign) CGFloat photoPreviewMaxWidth;
+/// The pixel width of output image, Default is 828px / 导出图片的宽度，默认828像素宽
+@property (nonatomic, assign) CGFloat photoWidth;
+
+/// Default is 4, Use in photos collectionView in TZPhotoPickerController
+/// 默认4列, TZPhotoPickerController中的照片collectionView
+@property (nonatomic, assign) NSInteger columnNumber;
+
+/// Sort photos ascending by modificationDate，Default is YES
+/// 对照片排序，按修改时间升序，默认是YES。如果设置为NO,最新的照片会显示在最前面，内部的拍照按钮会排在第一个
+@property (nonatomic, assign) BOOL sortAscendingByModificationDate;
+
+/// Minimum selectable photo width, Default is 0
+/// 最小可选中的图片宽度，默认是0，小于这个宽度的图片不可选中
+@property (nonatomic, assign) NSInteger minPhotoWidthSelectable;
+@property (nonatomic, assign) NSInteger minPhotoHeightSelectable;
+@property (nonatomic, assign) BOOL hideWhenCanNotSelect;
+
+/// Return YES if Authorized 返回YES如果得到了授权
+- (BOOL)authorizationStatusAuthorized;
+- (void)requestAuthorizationWithCompletion:(void (^)(void))completion;
+
+/// Get Album 获得相册/相册数组
+- (void)getCameraRollAlbum:(BOOL)allowPickingVideo allowPickingImage:(BOOL)allowPickingImage needFetchAssets:(BOOL)needFetchAssets completion:(void (^)(HGAlbumModel *model))completion;
+- (void)getAllAlbums:(BOOL)allowPickingVideo allowPickingImage:(BOOL)allowPickingImage needFetchAssets:(BOOL)needFetchAssets completion:(void (^)(NSArray<HGAlbumModel *> *models))completion;
+
+/// Get Assets 获得Asset数组
+- (void)getAssetsFromFetchResult:(PHFetchResult *)result completion:(void (^)(NSArray<HGAssetModel *> *models))completion;
+- (void)getAssetsFromFetchResult:(PHFetchResult *)result allowPickingVideo:(BOOL)allowPickingVideo allowPickingImage:(BOOL)allowPickingImage completion:(void (^)(NSArray<HGAssetModel *> *models))completion;
+- (void)getAssetFromFetchResult:(PHFetchResult *)result atIndex:(NSInteger)index allowPickingVideo:(BOOL)allowPickingVideo allowPickingImage:(BOOL)allowPickingImage completion:(void (^)(HGAssetModel *model))completion;
+
+/// Get photo 获得照片
+- (PHImageRequestID)getPostImageWithAlbumModel:(HGAlbumModel *)model completion:(void (^)(UIImage *postImage))completion;
+
+- (PHImageRequestID)getPhotoWithAsset:(PHAsset *)asset completion:(void (^)(UIImage *photo,NSDictionary *info,BOOL isDegraded))completion;
+- (PHImageRequestID)getPhotoWithAsset:(PHAsset *)asset photoWidth:(CGFloat)photoWidth completion:(void (^)(UIImage *photo,NSDictionary *info,BOOL isDegraded))completion;
+- (PHImageRequestID)getPhotoWithAsset:(PHAsset *)asset completion:(void (^)(UIImage *photo,NSDictionary *info,BOOL isDegraded))completion progressHandler:(void (^)(double progress, NSError *error, BOOL *stop, NSDictionary *info))progressHandler networkAccessAllowed:(BOOL)networkAccessAllowed;
+- (PHImageRequestID)getPhotoWithAsset:(PHAsset *)asset photoWidth:(CGFloat)photoWidth completion:(void (^)(UIImage *photo,NSDictionary *info,BOOL isDegraded))completion progressHandler:(void (^)(double progress, NSError *error, BOOL *stop, NSDictionary *info))progressHandler networkAccessAllowed:(BOOL)networkAccessAllowed;
+- (PHImageRequestID)requestImageDataForAsset:(PHAsset *)asset completion:(void (^)(NSData *imageData, NSString *dataUTI, UIImageOrientation orientation, NSDictionary *info))completion progressHandler:(void (^)(double progress, NSError *error, BOOL *stop, NSDictionary *info))progressHandler;
+
+/// Get full Image 获取原图
+/// 如下两个方法completion一般会调多次，一般会先返回缩略图，再返回原图(详见方法内部使用的系统API的说明)，如果info[PHImageResultIsDegradedKey] 为 YES，则表明当前返回的是缩略图，否则是原图。
+- (PHImageRequestID)getOriginalPhotoWithAsset:(PHAsset *)asset completion:(void (^)(UIImage *photo,NSDictionary *info))completion;
+- (PHImageRequestID)getOriginalPhotoWithAsset:(PHAsset *)asset newCompletion:(void (^)(UIImage *photo,NSDictionary *info,BOOL isDegraded))completion;
+- (PHImageRequestID)getOriginalPhotoWithAsset:(PHAsset *)asset progressHandler:(void (^)(double progress, NSError *error, BOOL *stop, NSDictionary *info))progressHandler newCompletion:(void (^)(UIImage *photo,NSDictionary *info,BOOL isDegraded))completion;
+// 该方法中，completion只会走一次
+- (PHImageRequestID)getOriginalPhotoDataWithAsset:(PHAsset *)asset completion:(void (^)(NSData *data,NSDictionary *info,BOOL isDegraded))completion;
+- (PHImageRequestID)getOriginalPhotoDataWithAsset:(PHAsset *)asset progressHandler:(void (^)(double progress, NSError *error, BOOL *stop, NSDictionary *info))progressHandler completion:(void (^)(NSData *data,NSDictionary *info,BOOL isDegraded))completion;
+
+/// Save photo 保存照片
+- (void)savePhotoWithImage:(UIImage *)image completion:(void (^)(PHAsset *asset, NSError *error))completion;
+- (void)savePhotoWithImage:(UIImage *)image location:(CLLocation *)location completion:(void (^)(PHAsset *asset, NSError *error))completion;
+
+/// Save video 保存视频
+- (void)saveVideoWithUrl:(NSURL *)url completion:(void (^)(PHAsset *asset, NSError *error))completion;
+- (void)saveVideoWithUrl:(NSURL *)url location:(CLLocation *)location completion:(void (^)(PHAsset *asset, NSError *error))completion;
+
+/// Get video 获得视频
+- (void)getVideoWithAsset:(PHAsset *)asset completion:(void (^)(AVPlayerItem * playerItem, NSDictionary * info))completion;
+- (void)getVideoWithAsset:(PHAsset *)asset progressHandler:(void (^)(double progress, NSError *error, BOOL *stop, NSDictionary *info))progressHandler completion:(void (^)(AVPlayerItem *, NSDictionary *))completion;
+
+/// Export video 导出视频 presetName: 预设名字，默认值是AVAssetExportPreset640x480
+- (void)getVideoOutputPathWithAsset:(PHAsset *)asset success:(void (^)(NSString *outputPath))success failure:(void (^)(NSString *errorMessage, NSError *error))failure;
+- (void)getVideoOutputPathWithAsset:(PHAsset *)asset presetName:(NSString *)presetName success:(void (^)(NSString *outputPath))success failure:(void (^)(NSString *errorMessage, NSError *error))failure;
+/// Deprecated, Use -getVideoOutputPathWithAsset:failure:success:
+- (void)getVideoOutputPathWithAsset:(PHAsset *)asset completion:(void (^)(NSString *outputPath))completion __attribute__((deprecated("Use -getVideoOutputPathWithAsset:failure:success:")));
+
+/// Get photo bytes 获得一组照片的大小
+- (void)getPhotosBytesWithArray:(NSArray *)photos completion:(void (^)(NSString *totalBytes))completion;
+
+- (BOOL)isCameraRollAlbum:(PHAssetCollection *)metadata;
+
+/// 检查照片大小是否满足最小要求
+- (BOOL)isPhotoSelectableWithAsset:(PHAsset *)asset;
+
+/// 修正图片转向
+- (UIImage *)fixOrientation:(UIImage *)aImage;
+
+/// 获取asset的资源类型
+- (TZAssetModelMediaType)getAssetType:(PHAsset *)asset;
+/// 缩放图片至新尺寸
+- (UIImage *)scaleImage:(UIImage *)image toSize:(CGSize)size;
+
+/// 判断asset是否是视频
+- (BOOL)isVideo:(PHAsset *)asset;
+
+/// for TZImagePreviewController
+- (NSString *)getNewTimeFromDurationSecond:(NSInteger)duration;
+
+- (HGAssetModel *)createModelWithAsset:(PHAsset *)asset;
 
 @end
 
-
-@interface HGImagePickerConfig : NSObject
-+ (instancetype)sharedInstance;
-@property (copy,   nonatomic) NSString *preferredLanguage;
-@property (assign, nonatomic) BOOL allowPickingImage;
-@property (assign, nonatomic) BOOL allowPickingVideo;
-@property (strong, nonatomic) NSBundle *languageBundle;
-@property (assign, nonatomic) BOOL showSelectedIndex;
-@property (assign, nonatomic) BOOL showPhotoCannotSelectLayer;
-@property (assign, nonatomic) BOOL notScaleImage;
-@property (assign, nonatomic) BOOL needFixComposition;
-
-/// 默认是50，如果一个GIF过大，里面图片个数可能超过1000，会导致内存飙升而崩溃
-@property (assign, nonatomic) NSInteger gifPreviewMaxImagesCount;
-/// 【自定义GIF播放方案】为了避免内存过大，内部默认限制只播放50帧（平均取），可通过gifPreviewMaxImagesCount属性调整，若对GIF预览有更好的效果要求，可实现这个block采用FLAnimatedImage等三方库来播放，但注意FLAnimatedImage有播放速度较慢问题，自行取舍下。
-//@property (nonatomic, copy) void (^gifImagePlayBlock)(TZPhotoPreviewView *view, UIImageView *imageView, NSData *gifData, NSDictionary *info);
-@end
-
-NS_ASSUME_NONNULL_END
+//@interface TZSortDescriptor : NSSortDescriptor
+//
+//@end

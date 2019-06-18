@@ -3,7 +3,7 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 51;
+	objectVersion = 50;
 	objects = {
 
 /* Begin PBXBuildFile section */
@@ -16,11 +16,22 @@
 		2E470BCB22B8C97D00D95F2E /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 2E470BCA22B8C97D00D95F2E /* main.m */; };
 		2E470BD522B8C97D00D95F2E /* HGImagePickerControllerTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 2E470BD422B8C97D00D95F2E /* HGImagePickerControllerTests.m */; };
 		2E470BE022B8C97D00D95F2E /* HGImagePickerControllerUITests.m in Sources */ = {isa = PBXBuildFile; fileRef = 2E470BDF22B8C97D00D95F2E /* HGImagePickerControllerUITests.m */; };
-		2EBC746E22B90167009D8030 /* UIViewController+Image.m in Sources */ = {isa = PBXBuildFile; fileRef = 2EBC746A22B90166009D8030 /* UIViewController+Image.m */; };
-		2EBC746F22B90167009D8030 /* HGImageManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 2EBC746C22B90166009D8030 /* HGImageManager.m */; };
-		2EBC747222B90929009D8030 /* HGAssetModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 2EBC747022B90929009D8030 /* HGAssetModel.m */; };
-		2EBC747522B90AA8009D8030 /* HGImageHelper.m in Sources */ = {isa = PBXBuildFile; fileRef = 2EBC747422B90AA8009D8030 /* HGImageHelper.m */; };
-		2EBC747822B912CE009D8030 /* HGAlbumListVC.m in Sources */ = {isa = PBXBuildFile; fileRef = 2EBC747722B912CE009D8030 /* HGAlbumListVC.m */; };
+		2EBC749822B91C79009D8030 /* HGImageManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 2EBC747A22B91C78009D8030 /* HGImageManager.m */; };
+		2EBC749922B91C79009D8030 /* HGImageRequestOperation.m in Sources */ = {isa = PBXBuildFile; fileRef = 2EBC747E22B91C78009D8030 /* HGImageRequestOperation.m */; };
+		2EBC749A22B91C79009D8030 /* HGPhotoPreviewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 2EBC748122B91C78009D8030 /* HGPhotoPreviewController.m */; };
+		2EBC749B22B91C79009D8030 /* HGProgressView.m in Sources */ = {isa = PBXBuildFile; fileRef = 2EBC748222B91C78009D8030 /* HGProgressView.m */; };
+		2EBC749C22B91C79009D8030 /* HGVideoPlayerController.m in Sources */ = {isa = PBXBuildFile; fileRef = 2EBC748422B91C78009D8030 /* HGVideoPlayerController.m */; };
+		2EBC749D22B91C79009D8030 /* HGImagePickerController.m in Sources */ = {isa = PBXBuildFile; fileRef = 2EBC748522B91C78009D8030 /* HGImagePickerController.m */; };
+		2EBC749E22B91C79009D8030 /* HGGifPhotoPreviewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 2EBC748822B91C78009D8030 /* HGGifPhotoPreviewController.m */; };
+		2EBC749F22B91C79009D8030 /* HGAssetCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 2EBC748922B91C78009D8030 /* HGAssetCell.m */; };
+		2EBC74A022B91C79009D8030 /* HGImageCropManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 2EBC748A22B91C78009D8030 /* HGImageCropManager.m */; };
+		2EBC74A122B91C79009D8030 /* HGPhotoPreviewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 2EBC748B22B91C79009D8030 /* HGPhotoPreviewCell.m */; };
+		2EBC74A222B91C79009D8030 /* HGAssetModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 2EBC748F22B91C79009D8030 /* HGAssetModel.m */; };
+		2EBC74A322B91C79009D8030 /* UIView+Layout.m in Sources */ = {isa = PBXBuildFile; fileRef = 2EBC749022B91C79009D8030 /* UIView+Layout.m */; };
+		2EBC74A422B91C79009D8030 /* NSBundle+TZImagePicker.m in Sources */ = {isa = PBXBuildFile; fileRef = 2EBC749222B91C79009D8030 /* NSBundle+TZImagePicker.m */; };
+		2EBC74A622B91C79009D8030 /* HGPhotoPickerController.m in Sources */ = {isa = PBXBuildFile; fileRef = 2EBC749622B91C79009D8030 /* HGPhotoPickerController.m */; };
+		2EBC74A722B91C79009D8030 /* HGLocationManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 2EBC749722B91C79009D8030 /* HGLocationManager.m */; };
+		2EBC74A922B9253F009D8030 /* HGImagePickerController.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 2EBC74A822B9253F009D8030 /* HGImagePickerController.bundle */; };
 		7165CA8F292EB8AD03DE8988 /* Pods_HGImagePickerControllerTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BF998C5BD3E5736DA24227C5 /* Pods_HGImagePickerControllerTests.framework */; };
 		78C5D250E7B8E21C248B7D9C /* Pods_HGImagePickerController.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 91AEAFBBAD8D4A632DD7CD22 /* Pods_HGImagePickerController.framework */; };
 		92D79BECEA54751A045C7CDB /* Pods_HGImagePickerControllerUITests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 19A3BC295DA4429EFF8F7BBA /* Pods_HGImagePickerControllerUITests.framework */; };
@@ -63,16 +74,37 @@
 		2E470BDB22B8C97D00D95F2E /* HGImagePickerControllerUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = HGImagePickerControllerUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		2E470BDF22B8C97D00D95F2E /* HGImagePickerControllerUITests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = HGImagePickerControllerUITests.m; sourceTree = "<group>"; };
 		2E470BE122B8C97D00D95F2E /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		2EBC746A22B90166009D8030 /* UIViewController+Image.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIViewController+Image.m"; sourceTree = "<group>"; };
-		2EBC746B22B90166009D8030 /* HGImageManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HGImageManager.h; sourceTree = "<group>"; };
-		2EBC746C22B90166009D8030 /* HGImageManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HGImageManager.m; sourceTree = "<group>"; };
-		2EBC746D22B90166009D8030 /* UIViewController+Image.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIViewController+Image.h"; sourceTree = "<group>"; };
-		2EBC747022B90929009D8030 /* HGAssetModel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HGAssetModel.m; sourceTree = "<group>"; };
-		2EBC747122B90929009D8030 /* HGAssetModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HGAssetModel.h; sourceTree = "<group>"; };
-		2EBC747322B90AA8009D8030 /* HGImageHelper.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = HGImageHelper.h; sourceTree = "<group>"; };
-		2EBC747422B90AA8009D8030 /* HGImageHelper.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = HGImageHelper.m; sourceTree = "<group>"; };
-		2EBC747622B912CE009D8030 /* HGAlbumListVC.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = HGAlbumListVC.h; sourceTree = "<group>"; };
-		2EBC747722B912CE009D8030 /* HGAlbumListVC.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = HGAlbumListVC.m; sourceTree = "<group>"; };
+		2EBC747922B91C77009D8030 /* HGPhotoPreviewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HGPhotoPreviewController.h; sourceTree = "<group>"; };
+		2EBC747A22B91C78009D8030 /* HGImageManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HGImageManager.m; sourceTree = "<group>"; };
+		2EBC747B22B91C78009D8030 /* HGPhotoPickerController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HGPhotoPickerController.h; sourceTree = "<group>"; };
+		2EBC747C22B91C78009D8030 /* HGImageManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HGImageManager.h; sourceTree = "<group>"; };
+		2EBC747D22B91C78009D8030 /* HGImagePickerController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HGImagePickerController.h; sourceTree = "<group>"; };
+		2EBC747E22B91C78009D8030 /* HGImageRequestOperation.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HGImageRequestOperation.m; sourceTree = "<group>"; };
+		2EBC747F22B91C78009D8030 /* HGAssetModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HGAssetModel.h; sourceTree = "<group>"; };
+		2EBC748022B91C78009D8030 /* HGVideoPlayerController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HGVideoPlayerController.h; sourceTree = "<group>"; };
+		2EBC748122B91C78009D8030 /* HGPhotoPreviewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HGPhotoPreviewController.m; sourceTree = "<group>"; };
+		2EBC748222B91C78009D8030 /* HGProgressView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HGProgressView.m; sourceTree = "<group>"; };
+		2EBC748322B91C78009D8030 /* HGPhotoPreviewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HGPhotoPreviewCell.h; sourceTree = "<group>"; };
+		2EBC748422B91C78009D8030 /* HGVideoPlayerController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HGVideoPlayerController.m; sourceTree = "<group>"; };
+		2EBC748522B91C78009D8030 /* HGImagePickerController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HGImagePickerController.m; sourceTree = "<group>"; };
+		2EBC748622B91C78009D8030 /* HGGifPhotoPreviewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HGGifPhotoPreviewController.h; sourceTree = "<group>"; };
+		2EBC748722B91C78009D8030 /* HGAssetCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HGAssetCell.h; sourceTree = "<group>"; };
+		2EBC748822B91C78009D8030 /* HGGifPhotoPreviewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HGGifPhotoPreviewController.m; sourceTree = "<group>"; };
+		2EBC748922B91C78009D8030 /* HGAssetCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HGAssetCell.m; sourceTree = "<group>"; };
+		2EBC748A22B91C78009D8030 /* HGImageCropManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HGImageCropManager.m; sourceTree = "<group>"; };
+		2EBC748B22B91C79009D8030 /* HGPhotoPreviewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HGPhotoPreviewCell.m; sourceTree = "<group>"; };
+		2EBC748C22B91C79009D8030 /* UIView+Layout.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIView+Layout.h"; sourceTree = "<group>"; };
+		2EBC748D22B91C79009D8030 /* HGProgressView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HGProgressView.h; sourceTree = "<group>"; };
+		2EBC748E22B91C79009D8030 /* HGImageCropManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HGImageCropManager.h; sourceTree = "<group>"; };
+		2EBC748F22B91C79009D8030 /* HGAssetModel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HGAssetModel.m; sourceTree = "<group>"; };
+		2EBC749022B91C79009D8030 /* UIView+Layout.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIView+Layout.m"; sourceTree = "<group>"; };
+		2EBC749122B91C79009D8030 /* NSBundle+TZImagePicker.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSBundle+TZImagePicker.h"; sourceTree = "<group>"; };
+		2EBC749222B91C79009D8030 /* NSBundle+TZImagePicker.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSBundle+TZImagePicker.m"; sourceTree = "<group>"; };
+		2EBC749322B91C79009D8030 /* HGImageRequestOperation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HGImageRequestOperation.h; sourceTree = "<group>"; };
+		2EBC749522B91C79009D8030 /* HGLocationManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HGLocationManager.h; sourceTree = "<group>"; };
+		2EBC749622B91C79009D8030 /* HGPhotoPickerController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HGPhotoPickerController.m; sourceTree = "<group>"; };
+		2EBC749722B91C79009D8030 /* HGLocationManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HGLocationManager.m; sourceTree = "<group>"; };
+		2EBC74A822B9253F009D8030 /* HGImagePickerController.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; path = HGImagePickerController.bundle; sourceTree = "<group>"; };
 		2FE4622FBF6E85F6E0E9FB11 /* Pods-HGImagePickerController.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-HGImagePickerController.release.xcconfig"; path = "Target Support Files/Pods-HGImagePickerController/Pods-HGImagePickerController.release.xcconfig"; sourceTree = "<group>"; };
 		610ED814C40AFC4ADF2922F2 /* Pods-HGImagePickerController.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-HGImagePickerController.debug.xcconfig"; path = "Target Support Files/Pods-HGImagePickerController/Pods-HGImagePickerController.debug.xcconfig"; sourceTree = "<group>"; };
 		64E320A67EBFB90521395F93 /* Pods-HGImagePickerControllerUITests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-HGImagePickerControllerUITests.debug.xcconfig"; path = "Target Support Files/Pods-HGImagePickerControllerUITests/Pods-HGImagePickerControllerUITests.debug.xcconfig"; sourceTree = "<group>"; };
@@ -171,16 +203,37 @@
 		2EBC746922B90166009D8030 /* Classes */ = {
 			isa = PBXGroup;
 			children = (
-				2EBC746D22B90166009D8030 /* UIViewController+Image.h */,
-				2EBC746A22B90166009D8030 /* UIViewController+Image.m */,
-				2EBC746B22B90166009D8030 /* HGImageManager.h */,
-				2EBC746C22B90166009D8030 /* HGImageManager.m */,
-				2EBC747622B912CE009D8030 /* HGAlbumListVC.h */,
-				2EBC747722B912CE009D8030 /* HGAlbumListVC.m */,
-				2EBC747322B90AA8009D8030 /* HGImageHelper.h */,
-				2EBC747422B90AA8009D8030 /* HGImageHelper.m */,
-				2EBC747122B90929009D8030 /* HGAssetModel.h */,
-				2EBC747022B90929009D8030 /* HGAssetModel.m */,
+				2EBC749122B91C79009D8030 /* NSBundle+TZImagePicker.h */,
+				2EBC749222B91C79009D8030 /* NSBundle+TZImagePicker.m */,
+				2EBC748722B91C78009D8030 /* HGAssetCell.h */,
+				2EBC748922B91C78009D8030 /* HGAssetCell.m */,
+				2EBC747F22B91C78009D8030 /* HGAssetModel.h */,
+				2EBC748F22B91C79009D8030 /* HGAssetModel.m */,
+				2EBC748622B91C78009D8030 /* HGGifPhotoPreviewController.h */,
+				2EBC748822B91C78009D8030 /* HGGifPhotoPreviewController.m */,
+				2EBC748E22B91C79009D8030 /* HGImageCropManager.h */,
+				2EBC748A22B91C78009D8030 /* HGImageCropManager.m */,
+				2EBC74A822B9253F009D8030 /* HGImagePickerController.bundle */,
+				2EBC747C22B91C78009D8030 /* HGImageManager.h */,
+				2EBC747A22B91C78009D8030 /* HGImageManager.m */,
+				2EBC747D22B91C78009D8030 /* HGImagePickerController.h */,
+				2EBC748522B91C78009D8030 /* HGImagePickerController.m */,
+				2EBC749322B91C79009D8030 /* HGImageRequestOperation.h */,
+				2EBC747E22B91C78009D8030 /* HGImageRequestOperation.m */,
+				2EBC749522B91C79009D8030 /* HGLocationManager.h */,
+				2EBC749722B91C79009D8030 /* HGLocationManager.m */,
+				2EBC747B22B91C78009D8030 /* HGPhotoPickerController.h */,
+				2EBC749622B91C79009D8030 /* HGPhotoPickerController.m */,
+				2EBC748322B91C78009D8030 /* HGPhotoPreviewCell.h */,
+				2EBC748B22B91C79009D8030 /* HGPhotoPreviewCell.m */,
+				2EBC747922B91C77009D8030 /* HGPhotoPreviewController.h */,
+				2EBC748122B91C78009D8030 /* HGPhotoPreviewController.m */,
+				2EBC748D22B91C79009D8030 /* HGProgressView.h */,
+				2EBC748222B91C78009D8030 /* HGProgressView.m */,
+				2EBC748022B91C78009D8030 /* HGVideoPlayerController.h */,
+				2EBC748422B91C78009D8030 /* HGVideoPlayerController.m */,
+				2EBC748C22B91C79009D8030 /* UIView+Layout.h */,
+				2EBC749022B91C79009D8030 /* UIView+Layout.m */,
 			);
 			path = Classes;
 			sourceTree = "<group>";
@@ -219,7 +272,7 @@
 				2E470BB122B8C97C00D95F2E /* Sources */,
 				2E470BB222B8C97C00D95F2E /* Frameworks */,
 				2E470BB322B8C97C00D95F2E /* Resources */,
-				5CE8E94D40E65A26B7F6CA24 /* [CP] Embed Pods Frameworks */,
+				783EE902C5940A0AE43135E6 /* [CP] Embed Pods Frameworks */,
 			);
 			buildRules = (
 			);
@@ -317,6 +370,7 @@
 			files = (
 				2E470BC822B8C97D00D95F2E /* LaunchScreen.storyboard in Resources */,
 				2E470BC522B8C97D00D95F2E /* Assets.xcassets in Resources */,
+				2EBC74A922B9253F009D8030 /* HGImagePickerController.bundle in Resources */,
 				2E470BC022B8C97C00D95F2E /* Main.storyboard in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -338,23 +392,6 @@
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXShellScriptBuildPhase section */
-		5CE8E94D40E65A26B7F6CA24 /* [CP] Embed Pods Frameworks */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputFileListPaths = (
-				"${PODS_ROOT}/Target Support Files/Pods-HGImagePickerController/Pods-HGImagePickerController-frameworks-${CONFIGURATION}-input-files.xcfilelist",
-			);
-			name = "[CP] Embed Pods Frameworks";
-			outputFileListPaths = (
-				"${PODS_ROOT}/Target Support Files/Pods-HGImagePickerController/Pods-HGImagePickerController-frameworks-${CONFIGURATION}-output-files.xcfilelist",
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-HGImagePickerController/Pods-HGImagePickerController-frameworks.sh\"\n";
-			showEnvVarsInLog = 0;
-		};
 		69FD201FB6F0EBAB4CE03E23 /* [CP] Check Pods Manifest.lock */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
@@ -375,6 +412,23 @@
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
 			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
+			showEnvVarsInLog = 0;
+		};
+		783EE902C5940A0AE43135E6 /* [CP] Embed Pods Frameworks */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-HGImagePickerController/Pods-HGImagePickerController-frameworks-${CONFIGURATION}-input-files.xcfilelist",
+			);
+			name = "[CP] Embed Pods Frameworks";
+			outputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-HGImagePickerController/Pods-HGImagePickerController-frameworks-${CONFIGURATION}-output-files.xcfilelist",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-HGImagePickerController/Pods-HGImagePickerController-frameworks.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
 		E91C76F879244AEF652112D0 /* [CP] Check Pods Manifest.lock */ = {
@@ -428,15 +482,25 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				2EBC746F22B90167009D8030 /* HGImageManager.m in Sources */,
-				2EBC746E22B90167009D8030 /* UIViewController+Image.m in Sources */,
+				2EBC749E22B91C79009D8030 /* HGGifPhotoPreviewController.m in Sources */,
+				2EBC74A022B91C79009D8030 /* HGImageCropManager.m in Sources */,
 				2E470BBD22B8C97C00D95F2E /* ViewController.m in Sources */,
-				2EBC747222B90929009D8030 /* HGAssetModel.m in Sources */,
-				2EBC747522B90AA8009D8030 /* HGImageHelper.m in Sources */,
+				2EBC749F22B91C79009D8030 /* HGAssetCell.m in Sources */,
+				2EBC749B22B91C79009D8030 /* HGProgressView.m in Sources */,
+				2EBC749A22B91C79009D8030 /* HGPhotoPreviewController.m in Sources */,
 				2E470BBA22B8C97C00D95F2E /* AppDelegate.m in Sources */,
+				2EBC74A422B91C79009D8030 /* NSBundle+TZImagePicker.m in Sources */,
+				2EBC74A122B91C79009D8030 /* HGPhotoPreviewCell.m in Sources */,
 				2E470BCB22B8C97D00D95F2E /* main.m in Sources */,
-				2EBC747822B912CE009D8030 /* HGAlbumListVC.m in Sources */,
+				2EBC749922B91C79009D8030 /* HGImageRequestOperation.m in Sources */,
+				2EBC749822B91C79009D8030 /* HGImageManager.m in Sources */,
+				2EBC74A622B91C79009D8030 /* HGPhotoPickerController.m in Sources */,
 				2E470BC322B8C97C00D95F2E /* HGImagePickerController.xcdatamodeld in Sources */,
+				2EBC74A322B91C79009D8030 /* UIView+Layout.m in Sources */,
+				2EBC74A222B91C79009D8030 /* HGAssetModel.m in Sources */,
+				2EBC749C22B91C79009D8030 /* HGVideoPlayerController.m in Sources */,
+				2EBC74A722B91C79009D8030 /* HGLocationManager.m in Sources */,
+				2EBC749D22B91C79009D8030 /* HGImagePickerController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

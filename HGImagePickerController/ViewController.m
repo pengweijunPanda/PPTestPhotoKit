@@ -7,11 +7,10 @@
 //
 
 #import "ViewController.h"
-#import "UIViewController+Image.h"
-#import "TZImagePickerController.h"
+#import "HGImagePickerController.h"
 #import "HGImageManager.h"
 
-@interface ViewController ()<UIViewControllerImagePickerDelegate>
+@interface ViewController ()
 - (IBAction)album:(id)sender;
 - (IBAction)camera:(id)sender;
 
@@ -25,13 +24,11 @@
 }
 
 
-- (IBAction)album:(id)sender {
-    [HGImageManager manager].weakVC = self;
-    [[HGImageManager manager] showAlbumList];
+- (IBAction)album:(id)sender { 
 }
 
 - (IBAction)camera:(id)sender {
-    TZImagePickerController *imagePickerVc = [[TZImagePickerController alloc] initWithMaxImagesCount:9 delegate:self];
+    HGImagePickerController *imagePickerVc = [[HGImagePickerController alloc] initWithMaxImagesCount:9 delegate:self];
     
     // You can get the photos by block, the same as by delegate.
     // 你可以通过block或者代理，来得到用户选择的照片.
