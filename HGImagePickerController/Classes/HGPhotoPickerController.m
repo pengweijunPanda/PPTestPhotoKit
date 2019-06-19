@@ -1,5 +1,5 @@
 //
-//  TZPhotoPickerController.m
+//  HGPhotoPickerController.m
 //  HGImagePickerController
 //
 //  Created by pengweijun on 2019/6/18.
@@ -18,8 +18,8 @@
 #import "HGLocationManager.h"
 #import <MobileCoreServices/MobileCoreServices.h>
 #import "HGImageRequestOperation.h"
-#import "UIColor+YYAdd.h"
-#import "UIImage+YYAdd.h"
+#import <YYKit/UIImage+YYAdd.h>
+#import <YYKit/UIColor+YYAdd.h>
 
 @interface HGPhotoPickerController ()<UICollectionViewDataSource,UICollectionViewDelegate,UIImagePickerControllerDelegate,UINavigationControllerDelegate,UIAlertViewDelegate> {
     NSMutableArray *_models;
@@ -43,14 +43,18 @@
 @property (nonatomic, assign) BOOL isSelectOriginalPhoto;
 @property (nonatomic, strong) HGCollectionView *collectionView;
 @property (nonatomic, strong) UILabel *noDataLabel;
-@property (strong, nonatomic) UICollectionViewFlowLayout *layout;
+@property (nonatomic, strong) UICollectionViewFlowLayout *layout;
 @property (nonatomic, strong) UIImagePickerController *imagePickerVc;
-@property (strong, nonatomic) CLLocation *location;
+@property (nonatomic, strong) CLLocation *location;
 @property (nonatomic, strong) NSOperationQueue *operationQueue;
+
+@property (nonatomic, assign) NSInteger oldTotalPhotoCount;//记录变化前的当前图片/GIF总数
+@property (nonatomic, assign) NSInteger newTotalPhotoCount;//记录变化后最新的图片/GIF总数
+
 @end
 
 static CGSize AssetGridThumbnailSize;
-static CGFloat itemMargin = 5;
+static CGFloat itemMargin = 1;
 
 @implementation HGPhotoPickerController
 
@@ -63,15 +67,17 @@ static CGFloat itemMargin = 5;
         // set appearance / 改变相册选择页的导航栏外观
         _imagePickerVc.navigationBar.barTintColor = self.navigationController.navigationBar.barTintColor;
         _imagePickerVc.navigationBar.tintColor = self.navigationController.navigationBar.tintColor;
-        UIBarButtonItem *tzBarItem, *BarItem;
+//      _imagePickerVc.navigationBar.barTintColor = UIColorHex(f0f0f0);
+//      _imagePickerVc.navigationBar.tintColor = UIColorHex(f0f0f0);
+        UIBarButtonItem *hgBarItem, *BarItem;
         if (@available(iOS 9, *)) {
-            tzBarItem = [UIBarButtonItem appearanceWhenContainedInInstancesOfClasses:@[[HGImagePickerController class]]];
+            hgBarItem = [UIBarButtonItem appearanceWhenContainedInInstancesOfClasses:@[[HGImagePickerController class]]];
             BarItem = [UIBarButtonItem appearanceWhenContainedInInstancesOfClasses:@[[UIImagePickerController class]]];
         } else {
-            tzBarItem = [UIBarButtonItem appearanceWhenContainedIn:[HGImagePickerController class], nil];
+            hgBarItem = [UIBarButtonItem appearanceWhenContainedIn:[HGImagePickerController class], nil];
             BarItem = [UIBarButtonItem appearanceWhenContainedIn:[UIImagePickerController class], nil];
         }
-        NSDictionary *titleTextAttributes = [tzBarItem titleTextAttributesForState:UIControlStateNormal];
+        NSDictionary *titleTextAttributes = [hgBarItem titleTextAttributesForState:UIControlStateNormal];
         [BarItem setTitleTextAttributes:titleTextAttributes forState:UIControlStateNormal];
     }
     return _imagePickerVc;
@@ -154,9 +160,9 @@ static CGFloat itemMargin = 5;
 }
 
 - (UIStatusBarStyle)preferredStatusBarStyle {
-    HGImagePickerController *tzImagePicker = (HGImagePickerController *)self.navigationController;
-    if (tzImagePicker && [tzImagePicker isKindOfClass:[HGImagePickerController class]]) {
-        return tzImagePicker.statusBarStyle;
+    HGImagePickerController *HGImagePicker = (HGImagePickerController *)self.navigationController;
+    if (HGImagePicker && [HGImagePicker isKindOfClass:[HGImagePickerController class]]) {
+        return HGImagePicker.statusBarStyle;
     }
     return [super preferredStatusBarStyle];
 }
@@ -185,8 +191,8 @@ static CGFloat itemMargin = 5;
         }
     }
     [self.view addSubview:_collectionView];
-    [_collectionView registerClass:[HGAssetCell class] forCellWithReuseIdentifier:@"TZAssetCell"];
-    [_collectionView registerClass:[TZAssetCameraCell class] forCellWithReuseIdentifier:@"TZAssetCameraCell"];
+    [_collectionView registerClass:[HGAssetCell class] forCellWithReuseIdentifier:NSStringFromClass(HGAssetCell.class)];
+    [_collectionView registerClass:[HGAssetCameraCell class] forCellWithReuseIdentifier:NSStringFromClass(HGAssetCameraCell.class)];
 }
 
 - (void)viewWillAppear:(BOOL)animated {
@@ -216,7 +222,8 @@ static CGFloat itemMargin = 5;
     _bottomToolBar = [[UIView alloc] initWithFrame:CGRectZero];
     CGFloat rgb = 253 / 255.0;
     _bottomToolBar.backgroundColor = [UIColor colorWithRed:rgb green:rgb blue:rgb alpha:1.0];
-    
+//    _bottomToolBar.backgroundColor = [UIColor clearColor];
+
 //    _previewButton = [UIButton buttonWithType:UIButtonTypeCustom];
 //    [_previewButton addTarget:self action:@selector(previewButtonClick) forControlEvents:UIControlEventTouchUpInside];
 //    _previewButton.titleLabel.font = [UIFont systemFontOfSize:16];
@@ -234,7 +241,7 @@ static CGFloat itemMargin = 5;
     
     if (hgImagePickerVc.allowPickingOriginalPhoto) {
         _originalPhotoButton = [UIButton buttonWithType:UIButtonTypeCustom];
-        _originalPhotoButton.imageEdgeInsets = UIEdgeInsetsMake(0, [TZCommonTools hg_isRightToLeftLayout] ? 10 : -10, 0, 0);
+        _originalPhotoButton.imageEdgeInsets = UIEdgeInsetsMake(0, [HGCommonTools hg_isRightToLeftLayout] ? 10 : -10, 0, 0);
         [_originalPhotoButton addTarget:self action:@selector(originalPhotoButtonClick) forControlEvents:UIControlEventTouchUpInside];
         _originalPhotoButton.titleLabel.font = [UIFont systemFontOfSize:16];
         [_originalPhotoButton setTitle:hgImagePickerVc.fullImageBtnTitleStr forState:UIControlStateNormal];
@@ -265,6 +272,7 @@ static CGFloat itemMargin = 5;
     _doneButton.enabled = hgImagePickerVc.selectedModels.count || hgImagePickerVc.alwaysEnableDoneBtn;
     [_doneButton setBackgroundImage:[UIImage imageWithColor:[UIColor colorWithHexString:@"#FFCE00"]] forState:UIControlStateNormal];
     [_doneButton setBackgroundImage:[UIImage imageWithColor:[UIColor colorWithHexString:@"#E0E0E0"]] forState:UIControlStateDisabled];
+    [_doneButton setImage:[UIImage hg_imageNamedFromMyBundle:@"photo_send"] forState:UIControlStateNormal];
 
 //    _numberImageView = [[UIImageView alloc] initWithImage:hgImagePickerVc.photoNumberIconImage];
 //    _numberImageView.hidden = hgImagePickerVc.selectedModels.count <= 0;
@@ -310,10 +318,10 @@ static CGFloat itemMargin = 5;
     CGFloat collectionViewHeight = 0;
     CGFloat naviBarHeight = self.navigationController.navigationBar.hg_height;
     BOOL isStatusBarHidden = [UIApplication sharedApplication].isStatusBarHidden;
-    CGFloat toolBarHeight = [TZCommonTools hg_isIPhoneX] ? 50 + (83 - 49) : 50;
+    CGFloat toolBarHeight = [HGCommonTools hg_isIPhoneX] ? 50 + (83 - 49) : 50;
     if (self.navigationController.navigationBar.isTranslucent) {
         top = naviBarHeight;
-        if (!isStatusBarHidden) top += [TZCommonTools hg_statusBarHeight];
+        if (!isStatusBarHidden) top += [HGCommonTools hg_statusBarHeight];
         collectionViewHeight = hgImagePickerVc.showSelectBtn ? self.view.hg_height - toolBarHeight - top : self.view.hg_height - top;;
     } else {
         collectionViewHeight = hgImagePickerVc.showSelectBtn ? self.view.hg_height - toolBarHeight : self.view.hg_height;
@@ -334,7 +342,7 @@ static CGFloat itemMargin = 5;
     if (!self.navigationController.navigationBar.isHidden) {
         toolBarTop = self.view.hg_height - toolBarHeight;
     } else {
-        CGFloat navigationHeight = naviBarHeight + [TZCommonTools hg_statusBarHeight];
+        CGFloat navigationHeight = naviBarHeight + [HGCommonTools hg_statusBarHeight];
         toolBarTop = self.view.hg_height - toolBarHeight - navigationHeight;
     }
     _bottomToolBar.frame = CGRectMake(0, toolBarTop, self.view.hg_width, toolBarHeight);
@@ -344,8 +352,9 @@ static CGFloat itemMargin = 5;
         previewWidth = 0.0;
     }
 //    _previewButton.frame = CGRectMake(10, 3, previewWidth, 44);
-
-    CGFloat numberLabelPrefixWidth = [hgImagePickerVc.disSelectPhotoStr boundingRectWithSize:CGSizeMake(CGFLOAT_MAX, CGFLOAT_MAX) options:NSStringDrawingUsesFontLeading attributes:@{NSFontAttributeName:[UIFont systemFontOfSize:15]} context:nil].size.width + 2;
+    NSString *nameLabelPrefixText = hgImagePickerVc.selectedModels.count?hgImagePickerVc.selectPhotosStr:hgImagePickerVc.disSelectPhotoStr;
+    CGFloat numberLabelPrefixWidth = [nameLabelPrefixText boundingRectWithSize:CGSizeMake(CGFLOAT_MAX, CGFLOAT_MAX) options:NSStringDrawingUsesFontLeading attributes:@{NSFontAttributeName:[UIFont systemFontOfSize:15]} context:nil].size.width + 2;
+    _numberLabelPrefix.text = nameLabelPrefixText;
 
     _numberLabelPrefix.frame = CGRectMake(20, 0, numberLabelPrefixWidth, 50);
 //    _previewButton.hg_width = !hgImagePickerVc.showSelectBtn ? 0 : previewWidth;
@@ -515,7 +524,7 @@ static CGFloat itemMargin = 5;
     // the cell lead to take a picture / 去拍照的cell
     HGImagePickerController *hgImagePickerVc = (HGImagePickerController *)self.navigationController;
     if (((hgImagePickerVc.sortAscendingByModificationDate && indexPath.item >= _models.count) || (!hgImagePickerVc.sortAscendingByModificationDate && indexPath.item == 0)) && _showTakePhotoBtn) {
-        TZAssetCameraCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:@"TZAssetCameraCell" forIndexPath:indexPath];
+        HGAssetCameraCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:NSStringFromClass(HGAssetCameraCell.class) forIndexPath:indexPath];
         cell.imageView.image = hgImagePickerVc.takePictureImage;
         if ([hgImagePickerVc.takePictureImageName isEqualToString:@"takePicture80"]) {
             cell.imageView.contentMode = UIViewContentModeCenter;
@@ -527,7 +536,7 @@ static CGFloat itemMargin = 5;
         return cell;
     }
     // the cell dipaly photo or video / 展示照片或视频的cell
-    HGAssetCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:@"TZAssetCell" forIndexPath:indexPath];
+    HGAssetCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:NSStringFromClass(HGAssetCell.class) forIndexPath:indexPath];
     cell.allowPickingMultipleVideo = hgImagePickerVc.allowPickingMultipleVideo;
     cell.photoDefImage = hgImagePickerVc.photoDefImage;
     cell.photoSelImage = hgImagePickerVc.photoSelImage;
@@ -546,7 +555,12 @@ static CGFloat itemMargin = 5;
     }
     cell.showSelectBtn = hgImagePickerVc.showSelectBtn;
     cell.allowPreview = hgImagePickerVc.allowPreview;
-    
+//    if (hgImagePickerVc.selectedModels.count>=hgImagePickerVc.maxImagesCount) {
+//    启动超过设置个数后的挡板模式
+//        cell.isShowWhiteBoard = !model.isSelected;
+//    }else{
+//        cell.isShowWhiteBoard = NO;
+//    }
     if (hgImagePickerVc.selectedModels.count >= hgImagePickerVc.maxImagesCount && hgImagePickerVc.showPhotoCannotSelectLayer && !model.isSelected) {
         cell.cannotSelectLayerButton.backgroundColor = hgImagePickerVc.cannotSelectLayerColor;
         cell.cannotSelectLayerButton.hidden = NO;
@@ -562,6 +576,7 @@ static CGFloat itemMargin = 5;
         __strong typeof(weakSelf) strongSelf = weakSelf;
 //        __strong typeof(weakLayer) strongLayer = weakLayer;
         HGImagePickerController *hgImagePickerVc = (HGImagePickerController *)strongSelf.navigationController;
+        strongSelf.oldTotalPhotoCount = hgImagePickerVc.selectedModels.count;
         // 1. cancel select / 取消选择
         if (isSelected) {
             strongCell.selectPhotoButton.selected = NO;
@@ -577,7 +592,7 @@ static CGFloat itemMargin = 5;
             if (hgImagePickerVc.showSelectedIndex || hgImagePickerVc.showPhotoCannotSelectLayer) {
                 [[NSNotificationCenter defaultCenter] postNotificationName:@"hg_PHOTO_PICKER_RELOAD_NOTIFICATION" object:strongSelf.navigationController];
             }
-//            [UIView showOscillatoryAnimationWithLayer:strongLayer type:TZOscillatoryAnimationToSmaller];
+//            [UIView showOscillatoryAnimationWithLayer:strongLayer type:HGOscillatoryAnimationToSmaller];
         } else {
             // 2. select:check if over the maxImagesCount / 选择照片,检查是否超过了最大个数的限制
             if (hgImagePickerVc.selectedModels.count < hgImagePickerVc.maxImagesCount) {
@@ -594,13 +609,15 @@ static CGFloat itemMargin = 5;
                     [[NSNotificationCenter defaultCenter] postNotificationName:@"hg_PHOTO_PICKER_RELOAD_NOTIFICATION" object:strongSelf.navigationController];
                 }
                 [strongSelf refreshBottomToolBarStatus];
-//                [UIView showOscillatoryAnimationWithLayer:strongLayer type:TZOscillatoryAnimationToSmaller];
+//                [UIView showOscillatoryAnimationWithLayer:strongLayer type:HGOscillatoryAnimationToSmaller];
             } else {
                 NSString *title = [NSString stringWithFormat:[NSBundle hg_localizedStringForKey:@"Select a maximum of %zd photos"], hgImagePickerVc.maxImagesCount];
                 [hgImagePickerVc showAlertWithTitle:title];
                 //#TODO:加其余图片挡板处理
             }
         }
+        //更新最新图片数
+        strongSelf.newTotalPhotoCount = hgImagePickerVc.selectedModels.count;
     };
     return cell;
 }
@@ -626,18 +643,16 @@ static CGFloat itemMargin = 5;
             videoPlayerVc.model = model;
             [self.navigationController pushViewController:videoPlayerVc animated:YES];
         }
-    }
-    //    else if (model.type == HGAssetModelMediaTypePhotoGif && hgImagePickerVc.allowPickingGif && !hgImagePickerVc.allowPickingMultipleVideo) {
-    //        if (hgImagePickerVc.selectedModels.count > 0) {
-    //            HGImagePickerController *imagePickerVc = (HGImagePickerController *)self.navigationController;
-    //            [imagePickerVc showAlertWithTitle:[NSBundle hg_localizedStringForKey:@"Can not choose both photo and GIF"]];
-    //        } else {
-    //            HGGifPhotoPreviewController *gifPreviewVc = [[HGGifPhotoPreviewController alloc] init];
-    //            gifPreviewVc.model = model;
-    //            [self.navigationController pushViewController:gifPreviewVc animated:YES];
-    //        }
-    //    }
-    else {
+    } else if (model.type == HGAssetModelMediaTypePhotoGif && hgImagePickerVc.allowPickingGif && !hgImagePickerVc.allowPickingMultipleVideo) {
+        if (hgImagePickerVc.selectedModels.count > 0) {
+            HGImagePickerController *imagePickerVc = (HGImagePickerController *)self.navigationController;
+            [imagePickerVc showAlertWithTitle:[NSBundle hg_localizedStringForKey:@"Can not choose both photo and GIF"]];
+        } else {
+            HGGifPhotoPreviewController *gifPreviewVc = [[HGGifPhotoPreviewController alloc] init];
+            gifPreviewVc.model = model;
+            [self.navigationController pushViewController:gifPreviewVc animated:YES];
+        }
+    } else {
         HGPhotoPreviewController *photoPreviewVc = [[HGPhotoPreviewController alloc] init];
         photoPreviewVc.currentIndex = index;
         photoPreviewVc.models = _models;
@@ -658,7 +673,7 @@ static CGFloat itemMargin = 5;
     AVAuthorizationStatus authStatus = [AVCaptureDevice authorizationStatusForMediaType:AVMediaTypeVideo];
     if ((authStatus == AVAuthorizationStatusRestricted || authStatus ==AVAuthorizationStatusDenied)) {
         
-        NSDictionary *infoDict = [TZCommonTools hg_getInfoDictionary];
+        NSDictionary *infoDict = [HGCommonTools hg_getInfoDictionary];
         // 无权限 做一个友好的提示
         NSString *appName = [infoDict valueForKey:@"CFBundleDisplayName"];
         if (!appName) appName = [infoDict valueForKey:@"CFBundleName"];

@@ -1,5 +1,5 @@
 //
-//  TZImageCropManager.m
+//  HGImageCropManager.m
 //  HGImagePickerController
 //
 //  Created by pengweijun on 2019/6/18.
@@ -115,9 +115,9 @@
 @end
 
 
-@implementation UIImage (TZGif)
+@implementation UIImage (HGGif)
 
-+ (UIImage *)sd_tz_animatedGIFWithData:(NSData *)data {
++ (UIImage *)sd_hg_animatedGIFWithData:(NSData *)data {
     if (!data) {
         return nil;
     }

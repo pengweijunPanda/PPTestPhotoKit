@@ -18,8 +18,8 @@
 @implementation HGImageManager
 
 CGSize AssetGridThumbnailSize;
-CGFloat TZScreenWidth;
-CGFloat TZScreenScale;
+CGFloat HGScreenWidth;
+CGFloat HGScreenScale;
 
 static HGImageManager *manager;
 static dispatch_once_t onceToken;
@@ -30,7 +30,7 @@ static dispatch_once_t onceToken;
         // manager.cachingImageManager = [[PHCachingImageManager alloc] init];
         // manager.cachingImageManager.allowsCachingHighQualityImages = YES;
         
-        [manager configTZScreenWidth];
+        [manager configHGScreenWidth];
     });
     return manager;
 }
@@ -42,24 +42,24 @@ static dispatch_once_t onceToken;
 
 - (void)setPhotoWidth:(CGFloat)photoWidth {
     _photoWidth = photoWidth;
-    TZScreenWidth = photoWidth / 2;
+    HGScreenWidth = photoWidth / 2;
 }
 
 - (void)setColumnNumber:(NSInteger)columnNumber {
-    [self configTZScreenWidth];
+    [self configHGScreenWidth];
 
     _columnNumber = columnNumber;
     CGFloat margin = 4;
-    CGFloat itemWH = (TZScreenWidth - 2 * margin - 4) / columnNumber - margin;
-    AssetGridThumbnailSize = CGSizeMake(itemWH * TZScreenScale, itemWH * TZScreenScale);
+    CGFloat itemWH = (HGScreenWidth - 2 * margin - 4) / columnNumber - margin;
+    AssetGridThumbnailSize = CGSizeMake(itemWH * HGScreenScale, itemWH * HGScreenScale);
 }
 
-- (void)configTZScreenWidth {
-    TZScreenWidth = [UIScreen mainScreen].bounds.size.width;
+- (void)configHGScreenWidth {
+    HGScreenWidth = [UIScreen mainScreen].bounds.size.width;
     // 测试发现，如果scale在plus真机上取到3.0，内存会增大特别多。故这里写死成2.0
-    TZScreenScale = 2.0;
-    if (TZScreenWidth > 700) {
-        TZScreenScale = 1.5;
+    HGScreenScale = 2.0;
+    if (HGScreenWidth > 700) {
+        HGScreenScale = 1.5;
     }
 }
 
@@ -211,9 +211,9 @@ static dispatch_once_t onceToken;
     if (!canSelect) return nil;
     
     HGAssetModel *model;
-    TZAssetModelMediaType type = [self getAssetType:asset];
+    HGAssetModelMediaType type = [self getAssetType:asset];
     if (!allowPickingVideo && type == HGAssetModelMediaTypeVideo) return nil;
-    if (!allowPickingImage && type == TZAssetModelMediaTypePhoto) return nil;
+    if (!allowPickingImage && type == HGAssetModelMediaTypePhoto) return nil;
     if (!allowPickingImage && type == HGAssetModelMediaTypePhotoGif) return nil;
     
     PHAsset *phAsset = (PHAsset *)asset;
@@ -229,14 +229,14 @@ static dispatch_once_t onceToken;
     return model;
 }
 
-- (TZAssetModelMediaType)getAssetType:(PHAsset *)asset {
-    TZAssetModelMediaType type = TZAssetModelMediaTypePhoto;
+- (HGAssetModelMediaType)getAssetType:(PHAsset *)asset {
+    HGAssetModelMediaType type = HGAssetModelMediaTypePhoto;
     PHAsset *phAsset = (PHAsset *)asset;
     if (phAsset.mediaType == PHAssetMediaTypeVideo)      type = HGAssetModelMediaTypeVideo;
-    else if (phAsset.mediaType == PHAssetMediaTypeAudio) type = TZAssetModelMediaTypeAudio;
+    else if (phAsset.mediaType == PHAssetMediaTypeAudio) type = HGAssetModelMediaTypeAudio;
     else if (phAsset.mediaType == PHAssetMediaTypeImage) {
         if (@available(iOS 9.1, *)) {
-            // if (asset.mediaSubtypes == PHAssetMediaSubtypePhotoLive) type = TZAssetModelMediaTypeLivePhoto;
+            // if (asset.mediaSubtypes == PHAssetMediaSubtypePhotoLive) type = HGAssetModelMediaTypeLivePhoto;
         }
         // Gif
         if ([[phAsset valueForKey:@"filename"] hasSuffix:@"GIF"]) {
@@ -307,7 +307,7 @@ static dispatch_once_t onceToken;
 
 /// Get photo 获得照片本身
 - (PHImageRequestID)getPhotoWithAsset:(PHAsset *)asset completion:(void (^)(UIImage *, NSDictionary *, BOOL isDegraded))completion {
-    CGFloat fullScreenWidth = TZScreenWidth;
+    CGFloat fullScreenWidth = HGScreenWidth;
     if (fullScreenWidth > _photoPreviewMaxWidth) {
         fullScreenWidth = _photoPreviewMaxWidth;
     }
@@ -319,7 +319,7 @@ static dispatch_once_t onceToken;
 }
 
 - (PHImageRequestID)getPhotoWithAsset:(PHAsset *)asset completion:(void (^)(UIImage *photo,NSDictionary *info,BOOL isDegraded))completion progressHandler:(void (^)(double progress, NSError *error, BOOL *stop, NSDictionary *info))progressHandler networkAccessAllowed:(BOOL)networkAccessAllowed {
-    CGFloat fullScreenWidth = TZScreenWidth;
+    CGFloat fullScreenWidth = HGScreenWidth;
     if (_photoPreviewMaxWidth > 0 && fullScreenWidth > _photoPreviewMaxWidth) {
         fullScreenWidth = _photoPreviewMaxWidth;
     }
@@ -345,12 +345,12 @@ static dispatch_once_t onceToken;
 
 - (PHImageRequestID)getPhotoWithAsset:(PHAsset *)asset photoWidth:(CGFloat)photoWidth completion:(void (^)(UIImage *photo,NSDictionary *info,BOOL isDegraded))completion progressHandler:(void (^)(double progress, NSError *error, BOOL *stop, NSDictionary *info))progressHandler networkAccessAllowed:(BOOL)networkAccessAllowed {
     CGSize imageSize;
-    if (photoWidth < TZScreenWidth && photoWidth < _photoPreviewMaxWidth) {
+    if (photoWidth < HGScreenWidth && photoWidth < _photoPreviewMaxWidth) {
         imageSize = AssetGridThumbnailSize;
     } else {
         PHAsset *phAsset = (PHAsset *)asset;
         CGFloat aspectRatio = phAsset.pixelWidth / (CGFloat)phAsset.pixelHeight;
-        CGFloat pixelWidth = photoWidth * TZScreenScale;
+        CGFloat pixelWidth = photoWidth * HGScreenScale;
         // 超宽图片
         if (aspectRatio > 1.8) {
             pixelWidth = pixelWidth * aspectRatio;
@@ -381,16 +381,16 @@ static dispatch_once_t onceToken;
         // Download image from iCloud / 从iCloud下载图片
         if ([info objectForKey:PHImageResultIsInCloudKey] && !result && networkAccessAllowed) {
             PHImageRequestOptions *options = [[PHImageRequestOptions alloc] init];
-            options.progressHandler = ^(double progress, NSError *error, BOOL *stop, NSDictionary *info) {
+            options.progressHandler = ^(double progress, NSError *error, BOOL *stop, NSDictionary *infoProcess) {
                 dispatch_async(dispatch_get_main_queue(), ^{
                     if (progressHandler) {
-                        progressHandler(progress, error, stop, info);
+                        progressHandler(progress, error, stop, infoProcess);
                     }
                 });
             };
             options.networkAccessAllowed = YES;
             options.resizeMode = PHImageRequestOptionsResizeModeFast;
-            [[PHImageManager defaultManager] requestImageDataForAsset:asset options:options resultHandler:^(NSData *imageData, NSString *dataUTI, UIImageOrientation orientation, NSDictionary *info) {
+            [[PHImageManager defaultManager] requestImageDataForAsset:asset options:options resultHandler:^(NSData *imageData, NSString *dataUTI, UIImageOrientation orientation, NSDictionary *infoInside) {
                 UIImage *resultImage = [UIImage imageWithData:imageData];
                 if (![HGImagePickerConfig sharedInstance].notScaleImage) {
                     resultImage = [self scaleImage:resultImage toSize:imageSize];
@@ -399,8 +399,11 @@ static dispatch_once_t onceToken;
                     resultImage = image;
                 }
                 resultImage = [self fixOrientation:resultImage];
-                if (completion) completion(resultImage,info,NO);
+                if (completion) completion(resultImage,infoInside,NO);
             }];
+        }else{
+            //本地手机图片
+            
         }
     }];
     return imageRequestID;
@@ -733,7 +736,7 @@ static dispatch_once_t onceToken;
 }
 
 - (HGAssetModel *)createModelWithAsset:(PHAsset *)asset {
-    TZAssetModelMediaType type = [[HGImageManager manager] getAssetType:asset];
+    HGAssetModelMediaType type = [[HGImageManager manager] getAssetType:asset];
     NSString *timeLength = type == HGAssetModelMediaTypeVideo ? [NSString stringWithFormat:@"%0.0f",asset.duration] : @"";
     timeLength = [[HGImageManager manager] getNewTimeFromDurationSecond:timeLength.integerValue];
     HGAssetModel *model = [HGAssetModel modelWithAsset:asset type:type timeLength:timeLength];
@@ -892,7 +895,7 @@ static dispatch_once_t onceToken;
 @end
 
 
-//@implementation TZSortDescriptor
+//@implementation HGSortDescriptor
 //
 //- (id)reversedSortDescriptor {
 //    return [NSNumber numberWithBool:![HGImageManager manager].sortAscendingByModificationDate];

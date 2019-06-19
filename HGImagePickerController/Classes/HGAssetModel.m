@@ -1,5 +1,5 @@
 //
-//  TZAssetModel.m
+//  HGAssetModel.m
 //  HGImagePickerController
 //
 //  Created by pengweijun on 2019/6/18.
@@ -11,7 +11,7 @@
 
 @implementation HGAssetModel
 
-+ (instancetype)modelWithAsset:(PHAsset *)asset type:(TZAssetModelMediaType)type{
++ (instancetype)modelWithAsset:(PHAsset *)asset type:(HGAssetModelMediaType)type{
     HGAssetModel *model = [[HGAssetModel alloc] init];
     model.asset = asset;
     model.isSelected = NO;
@@ -19,7 +19,7 @@
     return model;
 }
 
-+ (instancetype)modelWithAsset:(PHAsset *)asset type:(TZAssetModelMediaType)type timeLength:(NSString *)timeLength {
++ (instancetype)modelWithAsset:(PHAsset *)asset type:(HGAssetModelMediaType)type timeLength:(NSString *)timeLength {
     HGAssetModel *model = [self modelWithAsset:asset type:type];
     model.timeLength = timeLength;
     return model;

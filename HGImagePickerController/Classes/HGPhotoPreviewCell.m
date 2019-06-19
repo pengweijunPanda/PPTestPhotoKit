@@ -166,7 +166,7 @@
         // 先显示缩略图
         [[HGImageManager manager] getPhotoWithAsset:model.asset completion:^(UIImage *photo, NSDictionary *info, BOOL isDegraded) {
             self.imageView.image = photo;
-            [self resizeSubviews:photo];
+            [self resizeSubviews];
             if (self.isRequestingGIF) {
                 return;
             }
@@ -192,25 +192,14 @@
                     if ([HGImagePickerConfig sharedInstance].gifImagePlayBlock) {
                         [HGImagePickerConfig sharedInstance].gifImagePlayBlock(self, self.imageView, data, info);
                     } else {
-                        self.imageView.image = [UIImage sd_tz_animatedGIFWithData:data];
+                        self.imageView.image = [UIImage sd_hg_animatedGIFWithData:data];
                     }
-                    [self resizeSubviews:self.imageView.image];
+                    [self resizeSubviews];
                 }
             }];
         } progressHandler:nil networkAccessAllowed:NO];
     } else {
         self.asset = model.asset;
-    }
-}
-- (BOOL)isGifFromPhotoInfo:(NSDictionary *)info
-{
-#warning PHImageFileUTIKey这玩意是私有API，后续要base64再decode去拿才行，避免被拒
-    NSString *assetString = [info objectForKey:@"PHImageFileUTIKey"];
-    if ([assetString.uppercaseString hasSuffix:@"GIF"]) {
-        //这个图片是GIF图片
-        return YES;
-    } else {
-        return NO;
     }
 }
 
@@ -222,34 +211,24 @@
     _asset = asset;
     self.imageRequestID = [[HGImageManager manager] getPhotoWithAsset:asset completion:^(UIImage *photo, NSDictionary *info, BOOL isDegraded) {
         if (![asset isEqual:self->_asset]) return;
-        if ([self isGifFromPhotoInfo:info]) {
-            [self.animatedImageView setImageURL:info[@"PHImageFileURLKey"]];
-            [self resizeSubviews:photo];
-            self.imageView.hidden = YES;
-            self.animatedImageView.hidden = NO;
-        }else{
-            self.imageView.hidden = NO;
-            self.animatedImageView.hidden = YES;
-            
-            self.imageView.image = photo;
-            [self resizeSubviews:photo];
-            if (self.imageView.hg_height && self.allowCrop) {
-                CGFloat scale = MAX(self.cropRect.size.width / self.imageView.hg_width, self.cropRect.size.height / self.imageView.hg_height);
-                if (self.scaleAspectFillCrop && scale > 1) { // 如果设置图片缩放裁剪并且图片需要缩放
-                    CGFloat multiple = self.scrollView.maximumZoomScale / self.scrollView.minimumZoomScale;
-                    self.scrollView.minimumZoomScale = scale;
-                    self.scrollView.maximumZoomScale = scale * MAX(multiple, 2);
-                    [self.scrollView setZoomScale:scale animated:YES];
-                }
+        self.imageView.image = photo;
+        [self resizeSubviews];
+        if (self.imageView.hg_height && self.allowCrop) {
+            CGFloat scale = MAX(self.cropRect.size.width / self.imageView.hg_width, self.cropRect.size.height / self.imageView.hg_height);
+            if (self.scaleAspectFillCrop && scale > 1) { // 如果设置图片缩放裁剪并且图片需要缩放
+                CGFloat multiple = self.scrollView.maximumZoomScale / self.scrollView.minimumZoomScale;
+                self.scrollView.minimumZoomScale = scale;
+                self.scrollView.maximumZoomScale = scale * MAX(multiple, 2);
+                [self.scrollView setZoomScale:scale animated:YES];
             }
-            
-            self->_progressView.hidden = YES;
-            if (self.imageProgressUpdateBlock) {
-                self.imageProgressUpdateBlock(1);
-            }
-            if (!isDegraded) {
-                self.imageRequestID = 0;
-            }
+        }
+
+        self->_progressView.hidden = YES;
+        if (self.imageProgressUpdateBlock) {
+            self.imageProgressUpdateBlock(1);
+        }
+        if (!isDegraded) {
+            self.imageRequestID = 0;
         }
     } progressHandler:^(double progress, NSError *error, BOOL *stop, NSDictionary *info) {
         if (![asset isEqual:self->_asset]) return;
@@ -272,14 +251,14 @@
 
 - (void)recoverSubviews {
     [_scrollView setZoomScale:_scrollView.minimumZoomScale animated:NO];
-    [self resizeSubviews:_imageView.image];
+    [self resizeSubviews];
 }
 
-- (void)resizeSubviews:(UIImage *)sourceImage {
+- (void)resizeSubviews {
     _imageContainerView.hg_origin = CGPointZero;
     _imageContainerView.hg_width = self.scrollView.hg_width;
     
-    UIImage *image = sourceImage;
+    UIImage *image = _imageView.image;
     if (image.size.height / image.size.width > self.hg_height / self.scrollView.hg_width) {
         _imageContainerView.hg_height = floor(image.size.height / (image.size.width / self.scrollView.hg_width));
     } else {

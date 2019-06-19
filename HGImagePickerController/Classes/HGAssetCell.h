@@ -1,5 +1,5 @@
 //
-//  TZAssetCell.h
+//  HGAssetCell.h
 //  HGImagePickerController
 //
 //  Created by pengweijun on 2019/6/18.
@@ -20,7 +20,7 @@ typedef enum : NSUInteger {
 @class HGAssetModel;
 @interface HGAssetCell : UICollectionViewCell
 @property (weak, nonatomic) UIButton *selectPhotoButton;
-@property (weak, nonatomic) UIButton *cannotSelectLayerButton;
+@property (weak, nonatomic) UIButton *cannotSelectLayerButton;/**< 到达限制可选图片张数时展示挡板 */
 @property (nonatomic, strong) HGAssetModel *model;
 @property (assign, nonatomic) NSInteger index;
 @property (nonatomic, copy) void (^didSelectPhotoBlock)(BOOL);
@@ -51,6 +51,6 @@ typedef enum : NSUInteger {
 @end
 
 
-@interface TZAssetCameraCell : UICollectionViewCell
+@interface HGAssetCameraCell : UICollectionViewCell
 @property (nonatomic, strong) UIImageView *imageView;
 @end

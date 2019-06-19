@@ -12,6 +12,7 @@
 #import "HGAssetCell.h"
 #import "UIView+Layout.h"
 #import "HGImageManager.h"
+#import <YYKit/UIColor+YYAdd.h>
 
 @interface HGImagePickerController () {
     NSTimer *_timer;
@@ -27,8 +28,8 @@
     
     UIStatusBarStyle _originStatusBarStyle;
 }
-/// Default is 4, Use in photos collectionView in TZPhotoPickerController
-/// 默认4列, TZPhotoPickerController中的照片collectionView
+/// Default is 4, Use in photos collectionView in HGPhotoPickerController
+/// 默认4列, HGPhotoPickerController中的照片collectionView
 @property (nonatomic, assign) NSInteger columnNumber;
 @end
 
@@ -48,7 +49,7 @@
     [super viewDidLoad];
     self.needShowStatusBar = ![UIApplication sharedApplication].statusBarHidden;
     self.view.backgroundColor = [UIColor whiteColor];
-    self.navigationBar.barStyle = UIBarStyleBlack;
+    self.navigationBar.barStyle = UIBarStyleDefault;
     self.navigationBar.translucent = YES;
     [HGImageManager manager].shouldFixOrientation = NO;
 
@@ -57,8 +58,12 @@
     self.oKButtonTitleColorNormal   = [UIColor colorWithRed:(83/255.0) green:(179/255.0) blue:(17/255.0) alpha:1.0];
     self.oKButtonTitleColorDisabled = [UIColor colorWithRed:(83/255.0) green:(179/255.0) blue:(17/255.0) alpha:0.5];
     
-    self.navigationBar.barTintColor = [UIColor colorWithRed:(34/255.0) green:(34/255.0)  blue:(34/255.0) alpha:1.0];
-    self.navigationBar.tintColor = [UIColor whiteColor];
+//    self.navigationBar.barTintColor = [UIColor colorWithRed:(34/255.0) green:(34/255.0)  blue:(34/255.0) alpha:1.0];
+//    self.navigationBar.tintColor = [UIColor whiteColor];
+    
+    self.navigationBar.barTintColor = UIColorHex(f0f0f0);
+    self.navigationBar.tintColor = UIColorHex(2e2e2e);
+    
     self.automaticallyAdjustsScrollViewInsets = NO;
     if (self.needShowStatusBar) [UIApplication sharedApplication].statusBarHidden = NO;
 }
@@ -148,7 +153,7 @@
 
 - (instancetype)initWithMaxImagesCount:(NSInteger)maxImagesCount columnNumber:(NSInteger)columnNumber delegate:(id<HGImagePickerControllerDelegate>)delegate pushPhotoPickerVc:(BOOL)pushPhotoPickerVc {
     _pushPhotoPickerVc = pushPhotoPickerVc;
-    TZAlbumPickerController *albumPickerVc = [[TZAlbumPickerController alloc] init];
+    HGAlbumPickerController *albumPickerVc = [[HGAlbumPickerController alloc] init];
     albumPickerVc.isFirstAppear = YES;
     albumPickerVc.columnNumber = columnNumber;
     self = [super initWithRootViewController:albumPickerVc];
@@ -163,8 +168,10 @@
         self.allowPickingVideo = NO;
         self.allowPickingGif = YES;
         self.allowPickingImage = YES;
-        self.allowTakePicture = YES;
-        self.allowTakeVideo = YES;
+        self.allowTakePicture = NO;
+        self.allowTakeVideo = NO;
+        self.allowPickingMultipleVideo = YES;
+        self.showPhotoCannotSelectLayer = YES;
         self.videoMaximumDuration = 10 * 60;
         self.sortAscendingByModificationDate = YES;
         self.autoDismiss = YES;
@@ -179,7 +186,7 @@
             _tipLabel.font = [UIFont systemFontOfSize:16];
             _tipLabel.textColor = [UIColor blackColor];
             
-            NSDictionary *infoDict = [TZCommonTools hg_getInfoDictionary];
+            NSDictionary *infoDict = [HGCommonTools hg_getInfoDictionary];
             NSString *appName = [infoDict valueForKey:@"CFBundleDisplayName"];
             if (!appName) appName = [infoDict valueForKey:@"CFBundleName"];
             NSString *tipText = [NSString stringWithFormat:[NSBundle hg_localizedStringForKey:@"Allow %@ to access your album in \"Settings -> Privacy -> Photos\""],appName];
@@ -215,12 +222,15 @@
         previewVc.photos = [NSMutableArray arrayWithArray:selectedPhotos];
         previewVc.currentIndex = index;
         __weak typeof(self) weakSelf = self;
-        [previewVc setDoneButtonClickBlockWithPreviewType:^(NSArray<UIImage *> *photos, NSArray *assets, BOOL isSelectOriginalPhoto) {
+        [previewVc setDoneButtonClickBlockWithPreviewType:^(NSArray<UIImage *> *photos,NSArray<NSString *> *localPaths, NSArray *assets, BOOL isSelectOriginalPhoto) {
             __strong typeof(weakSelf) strongSelf = weakSelf;
             [strongSelf dismissViewControllerAnimated:YES completion:^{
                 if (!strongSelf) return;
+                //通常来说以下两种方式是互斥的
                 if (strongSelf.didFinishPickingPhotosHandle) {
                     strongSelf.didFinishPickingPhotosHandle(photos,assets,isSelectOriginalPhoto);
+                }else if (strongSelf.didFinishPickingPhotosWithLocalPathHandlle) {
+                    strongSelf.didFinishPickingPhotosWithLocalPathHandlle(localPaths,assets);
                 }
             }];
         }];
@@ -259,16 +269,16 @@
     self.timeout = 15;
     self.photoWidth = 828.0;
     self.photoPreviewMaxWidth = 600;
-    self.naviTitleColor = [UIColor whiteColor];
-    self.naviTitleFont = [UIFont systemFontOfSize:17];
-    self.barItemTextFont = [UIFont systemFontOfSize:15];
-    self.barItemTextColor = [UIColor whiteColor];
+    self.naviTitleColor = UIColorHex(2e2e2e);
+    self.naviTitleFont = [UIFont systemFontOfSize:17 weight:UIFontWeightMedium];
+    self.barItemTextFont = [UIFont systemFontOfSize:16];
+    self.barItemTextColor = UIColorHex(2e2e2e);
     self.allowPreview = YES;
     // 2.2.26版本，不主动缩放图片，降低内存占用
     self.notScaleImage = YES;
     self.needFixComposition = NO;
-    self.statusBarStyle = UIStatusBarStyleLightContent;
-    self.cannotSelectLayerColor = [[UIColor whiteColor] colorWithAlphaComponent:0.8];
+    self.statusBarStyle = UIStatusBarStyleDefault;
+    self.cannotSelectLayerColor = [[UIColor whiteColor] colorWithAlphaComponent:0.6];
     self.allowCameraLocation = YES;
     
     self.iconThemeColor = [UIColor colorWithRed:31 / 255.0 green:185 / 255.0 blue:34 / 255.0 alpha:1.0];
@@ -375,8 +385,8 @@
 
         [self pushPhotoPickerVc];
         
-        TZAlbumPickerController *albumPickerVc = (TZAlbumPickerController *)self.visibleViewController;
-        if ([albumPickerVc isKindOfClass:[TZAlbumPickerController class]]) {
+        HGAlbumPickerController *albumPickerVc = (HGAlbumPickerController *)self.visibleViewController;
+        if ([albumPickerVc isKindOfClass:[HGAlbumPickerController class]]) {
             [albumPickerVc configTableView];
         }
     }
@@ -515,7 +525,7 @@
         _columnNumber = 6;
     }
     
-    TZAlbumPickerController *albumPickerVc = [self.childViewControllers firstObject];
+    HGAlbumPickerController *albumPickerVc = [self.childViewControllers firstObject];
     albumPickerVc.columnNumber = _columnNumber;
     [HGImageManager manager].columnNumber = _columnNumber;
 }
@@ -684,13 +694,13 @@
 @end
 
 
-@interface TZAlbumPickerController ()<UITableViewDataSource,UITableViewDelegate> {
+@interface HGAlbumPickerController ()<UITableViewDataSource,UITableViewDelegate> {
     UITableView *_tableView;
 }
 @property (nonatomic, strong) NSMutableArray *albumArr;
 @end
 
-@implementation TZAlbumPickerController
+@implementation HGAlbumPickerController
 
 - (void)viewDidLoad {
     [super viewDidLoad];
@@ -749,7 +759,8 @@
                     self->_tableView.tableFooterView = [[UIView alloc] init];
                     self->_tableView.dataSource = self;
                     self->_tableView.delegate = self;
-                    [self->_tableView registerClass:[HGAlbumCell class] forCellReuseIdentifier:@"HGAlbumCell"];
+                    self->_tableView.separatorStyle = UITableViewCellSeparatorStyleNone;
+                    [self->_tableView registerClass:[HGAlbumCell class] forCellReuseIdentifier:NSStringFromClass(HGAlbumCell.class)];
                     [self.view addSubview:self->_tableView];
                 } else {
                     [self->_tableView reloadData];
@@ -764,9 +775,9 @@
 }
 
 - (UIStatusBarStyle)preferredStatusBarStyle {
-    HGImagePickerController *tzImagePicker = (HGImagePickerController *)self.navigationController;
-    if (tzImagePicker && [tzImagePicker isKindOfClass:[HGImagePickerController class]]) {
-        return tzImagePicker.statusBarStyle;
+    HGImagePickerController *HGImagePicker = (HGImagePickerController *)self.navigationController;
+    if (HGImagePicker && [HGImagePicker isKindOfClass:[HGImagePickerController class]]) {
+        return HGImagePicker.statusBarStyle;
     }
     return [super preferredStatusBarStyle];
 }
@@ -782,7 +793,7 @@
     BOOL isStatusBarHidden = [UIApplication sharedApplication].isStatusBarHidden;
     if (self.navigationController.navigationBar.isTranslucent) {
         top = naviBarHeight;
-        if (!isStatusBarHidden) top += [TZCommonTools hg_statusBarHeight];
+        if (!isStatusBarHidden) top += [HGCommonTools hg_statusBarHeight];
         tableViewHeight = self.view.hg_height - top;
     } else {
         tableViewHeight = self.view.hg_height;
@@ -839,7 +850,7 @@
 @end
 
 
-@implementation TZCommonTools
+@implementation HGCommonTools
 
 + (BOOL)hg_isIPhoneX {
     return (CGSizeEqualToSize([UIScreen mainScreen].bounds.size, CGSizeMake(375, 812)) ||

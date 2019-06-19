@@ -1,5 +1,5 @@
 //
-//  TZImageManager.h
+//  HGImageManager.h
 //  HGImagePickerController
 //
 //  Created by pengweijun on 2019/6/18.
@@ -32,8 +32,8 @@
 /// The pixel width of output image, Default is 828px / 导出图片的宽度，默认828像素宽
 @property (nonatomic, assign) CGFloat photoWidth;
 
-/// Default is 4, Use in photos collectionView in TZPhotoPickerController
-/// 默认4列, TZPhotoPickerController中的照片collectionView
+/// Default is 4, Use in photos collectionView in HGPhotoPickerController
+/// 默认4列, HGPhotoPickerController中的照片collectionView
 @property (nonatomic, assign) NSInteger columnNumber;
 
 /// Sort photos ascending by modificationDate，Default is YES
@@ -107,20 +107,20 @@
 - (UIImage *)fixOrientation:(UIImage *)aImage;
 
 /// 获取asset的资源类型
-- (TZAssetModelMediaType)getAssetType:(PHAsset *)asset;
+- (HGAssetModelMediaType)getAssetType:(PHAsset *)asset;
 /// 缩放图片至新尺寸
 - (UIImage *)scaleImage:(UIImage *)image toSize:(CGSize)size;
 
 /// 判断asset是否是视频
 - (BOOL)isVideo:(PHAsset *)asset;
 
-/// for TZImagePreviewController
+/// for HGImagePreviewController
 - (NSString *)getNewTimeFromDurationSecond:(NSInteger)duration;
 
 - (HGAssetModel *)createModelWithAsset:(PHAsset *)asset;
 
 @end
 
-//@interface TZSortDescriptor : NSSortDescriptor
+//@interface HGSortDescriptor : NSSortDescriptor
 //
 //@end

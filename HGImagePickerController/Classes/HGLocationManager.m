@@ -1,5 +1,5 @@
 //
-//  TZLocationManager.m
+//  HGLocationManager.m
 //  HGImagePickerController
 //
 //  Created by pengweijun on 2019/6/18.

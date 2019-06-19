@@ -1,12 +1,12 @@
 //
-//  NSBundle+TZImagePicker.m
+//  NSBundle+HGImagePicker.m
 //  HGImagePickerController
 //
 //  Created by pengweijun on 2019/6/18.
 //  Copyright © 2019年 彭伟军. All rights reserved.
 //
 
-#import "NSBundle+TZImagePicker.h"
+#import "NSBundle+HGImagePicker.h"
 #import "HGImagePickerController.h"
 
 @implementation NSBundle (HGImagePicker)

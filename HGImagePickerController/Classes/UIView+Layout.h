@@ -8,9 +8,9 @@
 #import <UIKit/UIKit.h>
 
 typedef enum : NSUInteger {
-    TZOscillatoryAnimationToBigger,
-    TZOscillatoryAnimationToSmaller,
-} TZOscillatoryAnimationType;
+    HGOscillatoryAnimationToBigger,
+    HGOscillatoryAnimationToSmaller,
+} HGOscillatoryAnimationType;
 
 @interface UIView (Layout)
 
@@ -25,6 +25,6 @@ typedef enum : NSUInteger {
 @property (nonatomic) CGPoint hg_origin;      ///< Shortcut for frame.origin.
 @property (nonatomic) CGSize  hg_size;        ///< Shortcut for frame.size.
 
-+ (void)showOscillatoryAnimationWithLayer:(CALayer *)layer type:(TZOscillatoryAnimationType)type;
++ (void)showOscillatoryAnimationWithLayer:(CALayer *)layer type:(HGOscillatoryAnimationType)type;
 
 @end

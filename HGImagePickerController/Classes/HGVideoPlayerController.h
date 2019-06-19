@@ -1,5 +1,5 @@
 //
-//  TZVideoPlayerController.h
+//  HGVideoPlayerController.h
 //  HGImagePickerController
 //
 //  Created by pengweijun on 2019/6/18.

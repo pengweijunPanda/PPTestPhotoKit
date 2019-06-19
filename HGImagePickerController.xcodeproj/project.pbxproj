@@ -3,7 +3,7 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 50;
+	objectVersion = 51;
 	objects = {
 
 /* Begin PBXBuildFile section */
@@ -28,7 +28,7 @@
 		2EBC74A122B91C79009D8030 /* HGPhotoPreviewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 2EBC748B22B91C79009D8030 /* HGPhotoPreviewCell.m */; };
 		2EBC74A222B91C79009D8030 /* HGAssetModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 2EBC748F22B91C79009D8030 /* HGAssetModel.m */; };
 		2EBC74A322B91C79009D8030 /* UIView+Layout.m in Sources */ = {isa = PBXBuildFile; fileRef = 2EBC749022B91C79009D8030 /* UIView+Layout.m */; };
-		2EBC74A422B91C79009D8030 /* NSBundle+TZImagePicker.m in Sources */ = {isa = PBXBuildFile; fileRef = 2EBC749222B91C79009D8030 /* NSBundle+TZImagePicker.m */; };
+		2EBC74A422B91C79009D8030 /* NSBundle+HGImagePicker.m in Sources */ = {isa = PBXBuildFile; fileRef = 2EBC749222B91C79009D8030 /* NSBundle+HGImagePicker.m */; };
 		2EBC74A622B91C79009D8030 /* HGPhotoPickerController.m in Sources */ = {isa = PBXBuildFile; fileRef = 2EBC749622B91C79009D8030 /* HGPhotoPickerController.m */; };
 		2EBC74A722B91C79009D8030 /* HGLocationManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 2EBC749722B91C79009D8030 /* HGLocationManager.m */; };
 		2EBC74A922B9253F009D8030 /* HGImagePickerController.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 2EBC74A822B9253F009D8030 /* HGImagePickerController.bundle */; };
@@ -98,8 +98,8 @@
 		2EBC748E22B91C79009D8030 /* HGImageCropManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HGImageCropManager.h; sourceTree = "<group>"; };
 		2EBC748F22B91C79009D8030 /* HGAssetModel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HGAssetModel.m; sourceTree = "<group>"; };
 		2EBC749022B91C79009D8030 /* UIView+Layout.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIView+Layout.m"; sourceTree = "<group>"; };
-		2EBC749122B91C79009D8030 /* NSBundle+TZImagePicker.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSBundle+TZImagePicker.h"; sourceTree = "<group>"; };
-		2EBC749222B91C79009D8030 /* NSBundle+TZImagePicker.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSBundle+TZImagePicker.m"; sourceTree = "<group>"; };
+		2EBC749122B91C79009D8030 /* NSBundle+HGImagePicker.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSBundle+HGImagePicker.h"; sourceTree = "<group>"; };
+		2EBC749222B91C79009D8030 /* NSBundle+HGImagePicker.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSBundle+HGImagePicker.m"; sourceTree = "<group>"; };
 		2EBC749322B91C79009D8030 /* HGImageRequestOperation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HGImageRequestOperation.h; sourceTree = "<group>"; };
 		2EBC749522B91C79009D8030 /* HGLocationManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HGLocationManager.h; sourceTree = "<group>"; };
 		2EBC749622B91C79009D8030 /* HGPhotoPickerController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HGPhotoPickerController.m; sourceTree = "<group>"; };
@@ -203,8 +203,8 @@
 		2EBC746922B90166009D8030 /* Classes */ = {
 			isa = PBXGroup;
 			children = (
-				2EBC749122B91C79009D8030 /* NSBundle+TZImagePicker.h */,
-				2EBC749222B91C79009D8030 /* NSBundle+TZImagePicker.m */,
+				2EBC749122B91C79009D8030 /* NSBundle+HGImagePicker.h */,
+				2EBC749222B91C79009D8030 /* NSBundle+HGImagePicker.m */,
 				2EBC748722B91C78009D8030 /* HGAssetCell.h */,
 				2EBC748922B91C78009D8030 /* HGAssetCell.m */,
 				2EBC747F22B91C78009D8030 /* HGAssetModel.h */,
@@ -489,7 +489,7 @@
 				2EBC749B22B91C79009D8030 /* HGProgressView.m in Sources */,
 				2EBC749A22B91C79009D8030 /* HGPhotoPreviewController.m in Sources */,
 				2E470BBA22B8C97C00D95F2E /* AppDelegate.m in Sources */,
-				2EBC74A422B91C79009D8030 /* NSBundle+TZImagePicker.m in Sources */,
+				2EBC74A422B91C79009D8030 /* NSBundle+HGImagePicker.m in Sources */,
 				2EBC74A122B91C79009D8030 /* HGPhotoPreviewCell.m in Sources */,
 				2E470BCB22B8C97D00D95F2E /* main.m in Sources */,
 				2EBC749922B91C79009D8030 /* HGImageRequestOperation.m in Sources */,

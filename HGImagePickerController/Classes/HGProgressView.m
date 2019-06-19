@@ -1,5 +1,5 @@
 //
-//  TZProgressView.m
+//  HGProgressView.m
 //  HGImagePickerController
 //
 //  Created by ttouch on 2016/12/6.

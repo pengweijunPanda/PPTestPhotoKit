@@ -1,5 +1,5 @@
 //
-//  TZAssetCell.m
+//  HGAssetCell.m
 //  HGImagePickerController
 //
 //  Created by pengweijun on 2019/6/18.
@@ -18,6 +18,9 @@
 @property (weak, nonatomic) UIImageView *selectImageView;
 @property (weak, nonatomic) UILabel *indexLabel;
 @property (weak, nonatomic) UIView *bottomView;
+
+@property (weak, nonatomic) UIImageView *imageTypeIcon;
+
 @property (weak, nonatomic) UILabel *timeLength;
 @property (strong, nonatomic) UITapGestureRecognizer *tapGesture;
 
@@ -86,6 +89,11 @@
     [self.contentView bringSubviewToFront:self.indexLabel];
 }
 
+//- (void)setIsShowWhiteBoard:(BOOL)isShowWhiteBoard{
+//    self.whiteboardView.hidden = !isShowWhiteBoard;
+//    [self.contentView bringSubviewToFront:self.whiteboardView];
+//}
+
 - (void)setShowSelectBtn:(BOOL)showSelectBtn {
     _showSelectBtn = showSelectBtn;
     BOOL selectable = [[HGImageManager manager] isPhotoSelectableWithAsset:self.model.asset];
@@ -107,7 +115,8 @@
         _selectImageView.hidden = YES;
         _selectPhotoButton.hidden = YES;
     }
-    
+    self.imageTypeIcon.hidden = YES;
+
     if (type == HGAssetCellTypeVideo) {
         self.bottomView.hidden = NO;
         self.timeLength.text = _model.timeLength;
@@ -115,7 +124,8 @@
         _timeLength.hg_left = self.videoImgView.hg_right;
         _timeLength.textAlignment = NSTextAlignmentRight;
     } else if (type == HGAssetCellTypePhotoGif && self.allowPickingGif) {
-        self.bottomView.hidden = NO;
+        self.bottomView.hidden = YES;
+        self.imageTypeIcon.hidden = NO;
         self.timeLength.text = @"GIF";
         self.videoImgView.hidden = YES;
         _timeLength.hg_left = 5;
@@ -140,7 +150,7 @@
     }
     self.selectImageView.image = sender.isSelected ? self.photoSelImage : self.photoDefImage;
     if (sender.isSelected) {
-        [UIView showOscillatoryAnimationWithLayer:_selectImageView.layer type:TZOscillatoryAnimationToBigger];
+        [UIView showOscillatoryAnimationWithLayer:_selectImageView.layer type:HGOscillatoryAnimationToBigger];
         // 用户选中了该图片，提前获取一下大图
         [self requestBigImage];
     } else { // 取消选中，取消大图的获取
@@ -211,6 +221,17 @@
 }
 
 #pragma mark - Lazy load
+//- (UIView *)whiteboardView {
+//    if (_whiteboardView == nil) {
+//        UIView *whiteboardView = [UIView new];
+//        whiteboardView.backgroundColor = [[UIColor whiteColor]colorWithAlphaComponent:0.8f];
+//        whiteboardView.userInteractionEnabled = NO;
+//        [self.contentView addSubview:whiteboardView];
+//        whiteboardView.hidden = YES;
+//        _whiteboardView = whiteboardView;
+//    }
+//    return _whiteboardView;
+//}
 
 - (UIButton *)selectPhotoButton {
     if (_selectPhotoButton == nil) {
@@ -247,6 +268,18 @@
     return _selectImageView;
 }
 
+- (UIImageView *)imageTypeIcon {
+    if (_imageTypeIcon == nil) {
+        UIImageView *imageTypeIcon = [[UIImageView alloc] init];
+        imageTypeIcon.contentMode = UIViewContentModeCenter;
+        imageTypeIcon.clipsToBounds = YES;
+        [imageTypeIcon setImage:[UIImage hg_imageNamedFromMyBundle:@"photo_type_GIF"]];
+        [self.contentView addSubview:imageTypeIcon];
+        _imageTypeIcon = imageTypeIcon;
+    }
+    return _imageTypeIcon;
+}
+
 - (UIView *)bottomView {
     if (_bottomView == nil) {
         UIView *bottomView = [[UIView alloc] init];
@@ -261,6 +294,7 @@
 - (UIButton *)cannotSelectLayerButton {
     if (_cannotSelectLayerButton == nil) {
         UIButton *cannotSelectLayerButton = [[UIButton alloc] init];
+        cannotSelectLayerButton.userInteractionEnabled = NO;
         [self.contentView addSubview:cannotSelectLayerButton];
         _cannotSelectLayerButton = cannotSelectLayerButton;
     }
@@ -334,6 +368,7 @@
     _bottomView.frame = CGRectMake(0, self.hg_height - 17, self.hg_width, 17);
     _videoImgView.frame = CGRectMake(8, 0, 17, 17);
     _timeLength.frame = CGRectMake(self.videoImgView.hg_right, 0, self.hg_width - self.videoImgView.hg_right - 5, 17);
+    _imageTypeIcon.frame = CGRectMake(6, self.hg_height - 14.1 - 5.7, 25, 14.1);
     
     self.type = (NSInteger)self.model.type;
     self.showSelectBtn = self.showSelectBtn;
@@ -359,6 +394,7 @@
 @property (weak, nonatomic) UIImageView *posterImageView;
 @property (weak, nonatomic) UILabel *titleLabel;
 @property (weak, nonatomic) UILabel *subTitleLabel;
+@property (strong, nonatomic) UIView *lineView;
 @end
 
 @implementation HGAlbumCell
@@ -366,6 +402,7 @@
 - (instancetype)initWithStyle:(UITableViewCellStyle)style reuseIdentifier:(NSString *)reuseIdentifier {
     self = [super initWithStyle:style reuseIdentifier:reuseIdentifier];
     self.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
+    [self.contentView addSubview:self.lineView];
     return self;
 }
 
@@ -387,7 +424,8 @@
 //    } else {
 //        self.selectedCountButton.hidden = YES;
 //    }
-    
+    self.lineView.hg_bottom = self.hg_height;
+    [self.contentView bringSubviewToFront:self.lineView];
     if (self.albumCellDidSetModelBlock) {
         self.albumCellDidSetModelBlock(self, _posterImageView, _titleLabel);
     }
@@ -403,6 +441,7 @@
     self.subTitleLabel.frame = CGRectMake(self.posterImageView.hg_right + 10, self.titleLabel.hg_bottom +10, 100, 16);
 
     self.posterImageView.frame = CGRectMake(16, 10, 60, 60);
+    self.lineView.frame = CGRectMake(self.posterImageView.hg_right + 10,self.hg_height - 1, self.hg_width - (self.posterImageView.hg_right + 10),1);
     
     if (self.albumCellDidLayoutSubviewsBlock) {
         self.albumCellDidLayoutSubviewsBlock(self, _posterImageView, _titleLabel);
@@ -414,6 +453,13 @@
 }
 
 #pragma mark - Lazy load
+- (UIView *)lineView {
+    if (!_lineView) {
+        _lineView = [[UIView alloc] init];
+        _lineView.backgroundColor = UIColorHex(EBEBEB);
+    }
+    return _lineView;
+}
 
 - (UIImageView *)posterImageView {
     if (_posterImageView == nil) {
@@ -468,7 +514,7 @@
 
 
 
-@implementation TZAssetCameraCell
+@implementation HGAssetCameraCell
 
 - (instancetype)initWithFrame:(CGRect)frame {
     self = [super initWithFrame:frame];

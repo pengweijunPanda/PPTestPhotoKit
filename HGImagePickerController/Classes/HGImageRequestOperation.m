@@ -1,5 +1,5 @@
 //
-//  TZImageRequestOperation.m
+//  HGImageRequestOperation.m
 //  HGImagePickerControllerFramework
 //
 //  Created by pengweijun on 2019/6/18.
@@ -14,7 +14,7 @@
 @synthesize executing = _executing;
 @synthesize finished = _finished;
 
-- (instancetype)initWithAsset:(PHAsset *)asset completion:(TZImageRequestCompletedBlock)completionBlock progressHandler:(TZImageRequestProgressBlock)progressHandler {
+- (instancetype)initWithAsset:(PHAsset *)asset completion:(HGImageRequestCompletedBlock)completionBlock progressHandler:(HGImageRequestProgressBlock)progressHandler {
     self = [super init];
     self.asset = asset;
     self.completedBlock = completionBlock;

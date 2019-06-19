@@ -4,21 +4,10 @@
 //
 //  Created by pengweijun on 2019/6/18.
 //  Copyright © 2019年 彭伟军. All rights reserved.
-//  version 3.2.1 - 2019.05.29
-//  更多信息，请前往项目的github地址：https://github.com/banchichen/HGImagePickerController
-
-/*
- 经过测试，比起xib的方式，把TZAssetCell改用纯代码的方式来写，滑动帧数明显提高了（约提高10帧左右）
- 
- 最初发现这个问题并修复的是@小鱼周凌宇同学，她的博客地址: http://zhoulingyu.com/
- 表示感谢~
- 
- 原来xib确实会导致性能问题啊...大家也要注意了...
- */
 
 #import <UIKit/UIKit.h>
 #import "HGAssetModel.h"
-#import "NSBundle+TZImagePicker.h"
+#import "NSBundle+HGImagePicker.h"
 #import "HGImageManager.h"
 #import "HGVideoPlayerController.h"
 #import "HGGifPhotoPreviewController.h"
@@ -239,6 +228,9 @@
 
 // For method annotations, see the corresponding method in HGImagePickerControllerDelegate / 方法注释见HGImagePickerControllerDelegate中对应方法
 @property (nonatomic, copy) void (^didFinishPickingPhotosHandle)(NSArray<UIImage *> *photos,NSArray *assets,BOOL isSelectOriginalPhoto);
+
+@property (nonatomic, copy) void (^didFinishPickingPhotosWithLocalPathHandlle)(NSArray<NSString *> *localPaths,NSArray *assets);
+
 @property (nonatomic, copy) void (^didFinishPickingPhotosWithInfosHandle)(NSArray<UIImage *> *photos,NSArray *assets,BOOL isSelectOriginalPhoto,NSArray<NSDictionary *> *infos);
 @property (nonatomic, copy) void (^imagePickerControllerDidCancelHandle)(void);
 @property (nonatomic, copy) void (^didFinishPickingVideoHandle)(UIImage *coverImage,PHAsset *asset);
@@ -287,7 +279,7 @@
 @end
 
 
-@interface TZAlbumPickerController : UIViewController
+@interface HGAlbumPickerController : UIViewController
 @property (nonatomic, assign) NSInteger columnNumber;
 @property (assign, nonatomic) BOOL isFirstAppear;
 - (void)configTableView;
@@ -299,7 +291,7 @@
 @end
 
 
-@interface TZCommonTools : NSObject
+@interface HGCommonTools : NSObject
 + (BOOL)hg_isIPhoneX;
 + (CGFloat)hg_statusBarHeight;
 // 获得Info.plist数据字典

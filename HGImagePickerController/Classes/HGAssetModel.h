@@ -1,5 +1,5 @@
 //
-//  TZAssetModel.h
+//  HGAssetModel.h
 //  HGImagePickerController
 //
 //  Created by pengweijun on 2019/6/18.
@@ -10,25 +10,25 @@
 #import <UIKit/UIKit.h>
 
 typedef enum : NSUInteger {
-    TZAssetModelMediaTypePhoto = 0,
-    TZAssetModelMediaTypeLivePhoto,
+    HGAssetModelMediaTypePhoto = 0,
+    HGAssetModelMediaTypeLivePhoto,
     HGAssetModelMediaTypePhotoGif,
     HGAssetModelMediaTypeVideo,
-    TZAssetModelMediaTypeAudio
-} TZAssetModelMediaType;
+    HGAssetModelMediaTypeAudio
+} HGAssetModelMediaType;
 
 @class PHAsset;
 @interface HGAssetModel : NSObject
 
 @property (nonatomic, strong) PHAsset *asset;
 @property (nonatomic, assign) BOOL isSelected;      ///< The select status of a photo, default is No
-@property (nonatomic, assign) TZAssetModelMediaType type;
+@property (nonatomic, assign) HGAssetModelMediaType type;
 @property (nonatomic, copy) NSString *timeLength;
 
 /// Init a photo dataModel With a PHAsset
 /// 用一个PHAsset实例，初始化一个照片模型
-+ (instancetype)modelWithAsset:(PHAsset *)asset type:(TZAssetModelMediaType)type;
-+ (instancetype)modelWithAsset:(PHAsset *)asset type:(TZAssetModelMediaType)type timeLength:(NSString *)timeLength;
++ (instancetype)modelWithAsset:(PHAsset *)asset type:(HGAssetModelMediaType)type;
++ (instancetype)modelWithAsset:(PHAsset *)asset type:(HGAssetModelMediaType)type timeLength:(NSString *)timeLength;
 
 @end
 

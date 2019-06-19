@@ -1,5 +1,5 @@
 //
-//  TZPhotoPreviewController.m
+//  HGPhotoPreviewController.m
 //  HGImagePickerController
 //
 //  Created by pengweijun on 2019/6/18.
@@ -13,6 +13,8 @@
 #import "HGImagePickerController.h"
 #import "HGImageManager.h"
 #import "HGImageCropManager.h"
+#import <YYKit/UIImage+YYAdd.h>
+#import <YYKit/UIColor+YYAdd.h>
 
 @interface HGPhotoPreviewController ()<UICollectionViewDataSource,UICollectionViewDelegate,UIScrollViewDelegate> {
     UICollectionView *_collectionView;
@@ -133,11 +135,12 @@
     _toolBar = [[UIView alloc] initWithFrame:CGRectZero];
     static CGFloat rgb = 34 / 255.0;
     _toolBar.backgroundColor = [UIColor colorWithRed:rgb green:rgb blue:rgb alpha:0.7];
-    
+//    _toolBar.backgroundColor = [UIColor clearColor];
+
     HGImagePickerController *_hgImagePickerVc = (HGImagePickerController *)self.navigationController;
     if (_hgImagePickerVc.allowPickingOriginalPhoto) {
         _originalPhotoButton = [UIButton buttonWithType:UIButtonTypeCustom];
-        _originalPhotoButton.imageEdgeInsets = UIEdgeInsetsMake(0, [TZCommonTools hg_isRightToLeftLayout] ? 10 : -10, 0, 0);
+        _originalPhotoButton.imageEdgeInsets = UIEdgeInsetsMake(0, [HGCommonTools hg_isRightToLeftLayout] ? 10 : -10, 0, 0);
         _originalPhotoButton.backgroundColor = [UIColor clearColor];
         [_originalPhotoButton addTarget:self action:@selector(originalPhotoButtonClick) forControlEvents:UIControlEventTouchUpInside];
         _originalPhotoButton.titleLabel.font = [UIFont systemFontOfSize:13];
@@ -159,28 +162,31 @@
     _doneButton = [UIButton buttonWithType:UIButtonTypeCustom];
     _doneButton.titleLabel.font = [UIFont systemFontOfSize:16];
     [_doneButton addTarget:self action:@selector(doneButtonClick) forControlEvents:UIControlEventTouchUpInside];
-    [_doneButton setTitle:_hgImagePickerVc.doneBtnTitleStr forState:UIControlStateNormal];
-    [_doneButton setTitleColor:_hgImagePickerVc.oKButtonTitleColorNormal forState:UIControlStateNormal];
+//    [_doneButton setTitle:_hgImagePickerVc.doneBtnTitleStr forState:UIControlStateNormal];
+//    [_doneButton setTitleColor:_hgImagePickerVc.oKButtonTitleColorNormal forState:UIControlStateNormal];
+    [_doneButton setBackgroundImage:[UIImage imageWithColor:[UIColor colorWithHexString:@"#FFCE00"]] forState:UIControlStateNormal];
+    [_doneButton setBackgroundImage:[UIImage imageWithColor:[UIColor colorWithHexString:@"#E0E0E0"]] forState:UIControlStateDisabled];
+    [_doneButton setImage:[UIImage hg_imageNamedFromMyBundle:@"photo_send"] forState:UIControlStateNormal];
+
+//    _numberImageView = [[UIImageView alloc] initWithImage:_hgImagePickerVc.photoNumberIconImage];
+//    _numberImageView.backgroundColor = [UIColor clearColor];
+//    _numberImageView.clipsToBounds = YES;
+//    _numberImageView.contentMode = UIViewContentModeScaleAspectFit;
+//    _numberImageView.hidden = _hgImagePickerVc.selectedModels.count <= 0;
     
-    _numberImageView = [[UIImageView alloc] initWithImage:_hgImagePickerVc.photoNumberIconImage];
-    _numberImageView.backgroundColor = [UIColor clearColor];
-    _numberImageView.clipsToBounds = YES;
-    _numberImageView.contentMode = UIViewContentModeScaleAspectFit;
-    _numberImageView.hidden = _hgImagePickerVc.selectedModels.count <= 0;
-    
-    _numberLabel = [[UILabel alloc] init];
-    _numberLabel.font = [UIFont systemFontOfSize:15];
-    _numberLabel.textColor = [UIColor whiteColor];
-    _numberLabel.textAlignment = NSTextAlignmentCenter;
-    _numberLabel.text = [NSString stringWithFormat:@"%zd",_hgImagePickerVc.selectedModels.count];
-    _numberLabel.hidden = _hgImagePickerVc.selectedModels.count <= 0;
-    _numberLabel.backgroundColor = [UIColor clearColor];
+//    _numberLabel = [[UILabel alloc] init];
+//    _numberLabel.font = [UIFont systemFontOfSize:15];
+//    _numberLabel.textColor = [UIColor whiteColor];
+//    _numberLabel.textAlignment = NSTextAlignmentCenter;
+//    _numberLabel.text = [NSString stringWithFormat:@"%zd",_hgImagePickerVc.selectedModels.count];
+//    _numberLabel.hidden = _hgImagePickerVc.selectedModels.count <= 0;
+//    _numberLabel.backgroundColor = [UIColor clearColor];
     
     [_originalPhotoButton addSubview:_originalPhotoLabel];
     [_toolBar addSubview:_doneButton];
     [_toolBar addSubview:_originalPhotoButton];
-    [_toolBar addSubview:_numberImageView];
-    [_toolBar addSubview:_numberLabel];
+//    [_toolBar addSubview:_numberImageView];
+//    [_toolBar addSubview:_numberLabel];
     [self.view addSubview:_toolBar];
     
     if (_hgImagePickerVc.photoPreviewPageUIConfigBlock) {
@@ -203,7 +209,7 @@
     [self.view addSubview:_collectionView];
     [_collectionView registerClass:[HGPhotoPreviewCell class] forCellWithReuseIdentifier:@"HGPhotoPreviewCell"];
     [_collectionView registerClass:[HGVideoPreviewCell class] forCellWithReuseIdentifier:@"HGVideoPreviewCell"];
-//    [_collectionView registerClass:[HGGifPreviewCell class] forCellWithReuseIdentifier:@"HGGifPreviewCell"];
+    [_collectionView registerClass:[HGGifPreviewCell class] forCellWithReuseIdentifier:@"HGGifPreviewCell"];
 }
 
 - (void)configCropView {
@@ -245,7 +251,7 @@
     [super viewDidLayoutSubviews];
     HGImagePickerController *_hgImagePickerVc = (HGImagePickerController *)self.navigationController;
     
-    CGFloat statusBarHeight = [TZCommonTools hg_statusBarHeight];
+    CGFloat statusBarHeight = [HGCommonTools hg_statusBarHeight];
     CGFloat statusBarHeightInterval = statusBarHeight - 20;
     CGFloat naviBarHeight = statusBarHeight + _hgImagePickerVc.navigationBar.hg_height;
     _naviBar.frame = CGRectMake(0, 0, self.view.hg_width, naviBarHeight);
@@ -266,7 +272,7 @@
         [_collectionView reloadData];
     }
     
-    CGFloat toolBarHeight = [TZCommonTools hg_isIPhoneX] ? 44 + (83 - 49) : 44;
+    CGFloat toolBarHeight = [HGCommonTools hg_isIPhoneX] ? 44 + (83 - 49) : 44;
     CGFloat toolBarTop = self.view.hg_height - toolBarHeight;
     _toolBar.frame = CGRectMake(0, toolBarTop, self.view.hg_width, toolBarHeight);
     if (_hgImagePickerVc.allowPickingOriginalPhoto) {
@@ -274,8 +280,13 @@
         _originalPhotoButton.frame = CGRectMake(0, 0, fullImageWidth + 56, 44);
         _originalPhotoLabel.frame = CGRectMake(fullImageWidth + 42, 0, 80, 44);
     }
-    [_doneButton sizeToFit];
-    _doneButton.frame = CGRectMake(self.view.hg_width - _doneButton.hg_width - 12, 0, _doneButton.hg_width, 44);
+//    [_doneButton sizeToFit];
+//    _doneButton.frame = CGRectMake(self.view.hg_width - _doneButton.hg_width - 12, 0, _doneButton.hg_width, 44);
+    
+    _doneButton.frame = CGRectMake(self.view.hg_width - 50 - 10, 10, 50, 30);
+    _doneButton.layer.cornerRadius = 30/2;
+    _doneButton.clipsToBounds = YES;
+    
     _numberImageView.frame = CGRectMake(_doneButton.hg_left - 24 - 5, 10, 24, 24);
     _numberLabel.frame = _numberImageView.frame;
     
@@ -348,9 +359,9 @@
     model.isSelected = !selectButton.isSelected;
     [self refreshNaviBarAndBottomBarState];
     if (model.isSelected) {
-        [UIView showOscillatoryAnimationWithLayer:selectButton.imageView.layer type:TZOscillatoryAnimationToBigger];
+        [UIView showOscillatoryAnimationWithLayer:selectButton.imageView.layer type:HGOscillatoryAnimationToBigger];
     }
-    [UIView showOscillatoryAnimationWithLayer:_numberImageView.layer type:TZOscillatoryAnimationToSmaller];
+    [UIView showOscillatoryAnimationWithLayer:_numberImageView.layer type:HGOscillatoryAnimationToSmaller];
 }
 
 - (void)backButtonClick {
@@ -401,9 +412,18 @@
     } else if (self.doneButtonClickBlock) { // 非裁剪状态
         self.doneButtonClickBlock(_isSelectOriginalPhoto);
     }
+    NSArray *localPaths = [self processLocalPaths];
     if (self.doneButtonClickBlockWithPreviewType) {
-        self.doneButtonClickBlockWithPreviewType(self.photos,_hgImagePickerVc.selectedAssets,self.isSelectOriginalPhoto);
+        self.doneButtonClickBlockWithPreviewType(self.photos,localPaths,_hgImagePickerVc.selectedAssets,self.isSelectOriginalPhoto);
     }
+}
+
+- (NSArray <NSString *>*)processLocalPaths{
+    HGImagePickerController *_hgImagePickerVc = (HGImagePickerController *)self.navigationController;
+    [_hgImagePickerVc.selectedModels enumerateObjectsUsingBlock:^(HGAssetModel * _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
+        
+    }];
+    return @[];
 }
 
 - (void)originalPhotoButtonClick {
@@ -457,8 +477,8 @@
     __weak typeof(self) weakSelf = self;
     if (_hgImagePickerVc.allowPickingMultipleVideo && model.type == HGAssetModelMediaTypeVideo) {
         cell = [collectionView dequeueReusableCellWithReuseIdentifier:@"HGVideoPreviewCell" forIndexPath:indexPath];
-//    } else if (_hgImagePickerVc.allowPickingMultipleVideo && model.type == HGAssetModelMediaTypePhotoGif && _hgImagePickerVc.allowPickingGif) {
-//        cell = [collectionView dequeueReusableCellWithReuseIdentifier:@"HGGifPreviewCell" forIndexPath:indexPath];
+    } else if (_hgImagePickerVc.allowPickingMultipleVideo && model.type == HGAssetModelMediaTypePhotoGif && _hgImagePickerVc.allowPickingGif) {
+        cell = [collectionView dequeueReusableCellWithReuseIdentifier:@"HGGifPreviewCell" forIndexPath:indexPath];
     } else {
         cell = [collectionView dequeueReusableCellWithReuseIdentifier:@"HGPhotoPreviewCell" forIndexPath:indexPath];
         HGPhotoPreviewCell *photoPreviewCell = (HGPhotoPreviewCell *)cell;
@@ -582,7 +602,7 @@
 }
 
 - (NSInteger)currentIndex {
-    return [TZCommonTools hg_isRightToLeftLayout] ? self.models.count - _currentIndex - 1 : _currentIndex;
+    return [HGCommonTools hg_isRightToLeftLayout] ? self.models.count - _currentIndex - 1 : _currentIndex;
 }
 
 @end
