@@ -201,9 +201,9 @@
     _collectionView.contentOffset = CGPointMake(0, 0);
     _collectionView.contentSize = CGSizeMake(self.models.count * (self.view.hg_width + 20), 0);
     [self.view addSubview:_collectionView];
-    [_collectionView registerClass:[HGPhotoPreviewCell class] forCellWithReuseIdentifier:@"TZPhotoPreviewCell"];
-    [_collectionView registerClass:[HGVideoPreviewCell class] forCellWithReuseIdentifier:@"TZVideoPreviewCell"];
-    [_collectionView registerClass:[TZGifPreviewCell class] forCellWithReuseIdentifier:@"TZGifPreviewCell"];
+    [_collectionView registerClass:[HGPhotoPreviewCell class] forCellWithReuseIdentifier:@"HGPhotoPreviewCell"];
+    [_collectionView registerClass:[HGVideoPreviewCell class] forCellWithReuseIdentifier:@"HGVideoPreviewCell"];
+//    [_collectionView registerClass:[HGGifPreviewCell class] forCellWithReuseIdentifier:@"HGGifPreviewCell"];
 }
 
 - (void)configCropView {
@@ -310,7 +310,7 @@
                 [_hgImagePickerVc.selectedAssets addObject:_assetsTemp[self.currentIndex]];
                 [self.photos addObject:_photosTemp[self.currentIndex]];
             }
-            if (model.type == TZAssetModelMediaTypeVideo && !_hgImagePickerVc.allowPickingMultipleVideo) {
+            if (model.type == HGAssetModelMediaTypeVideo && !_hgImagePickerVc.allowPickingMultipleVideo) {
                 [_hgImagePickerVc showAlertWithTitle:[NSBundle hg_localizedStringForKey:@"Select the video when in multi state, we will handle the video as a photo"]];
             }
         }
@@ -455,12 +455,12 @@
     
     HGAssetPreviewCell *cell;
     __weak typeof(self) weakSelf = self;
-    if (_hgImagePickerVc.allowPickingMultipleVideo && model.type == TZAssetModelMediaTypeVideo) {
-        cell = [collectionView dequeueReusableCellWithReuseIdentifier:@"TZVideoPreviewCell" forIndexPath:indexPath];
-    } else if (_hgImagePickerVc.allowPickingMultipleVideo && model.type == TZAssetModelMediaTypePhotoGif && _hgImagePickerVc.allowPickingGif) {
-        cell = [collectionView dequeueReusableCellWithReuseIdentifier:@"TZGifPreviewCell" forIndexPath:indexPath];
+    if (_hgImagePickerVc.allowPickingMultipleVideo && model.type == HGAssetModelMediaTypeVideo) {
+        cell = [collectionView dequeueReusableCellWithReuseIdentifier:@"HGVideoPreviewCell" forIndexPath:indexPath];
+//    } else if (_hgImagePickerVc.allowPickingMultipleVideo && model.type == HGAssetModelMediaTypePhotoGif && _hgImagePickerVc.allowPickingGif) {
+//        cell = [collectionView dequeueReusableCellWithReuseIdentifier:@"HGGifPreviewCell" forIndexPath:indexPath];
     } else {
-        cell = [collectionView dequeueReusableCellWithReuseIdentifier:@"TZPhotoPreviewCell" forIndexPath:indexPath];
+        cell = [collectionView dequeueReusableCellWithReuseIdentifier:@"HGPhotoPreviewCell" forIndexPath:indexPath];
         HGPhotoPreviewCell *photoPreviewCell = (HGPhotoPreviewCell *)cell;
         photoPreviewCell.cropRect = _hgImagePickerVc.cropRect;
         photoPreviewCell.allowCrop = _hgImagePickerVc.allowCrop;
@@ -539,7 +539,7 @@
     // If is previewing video, hide original photo button
     // 如果正在预览的是视频，隐藏原图按钮
     if (!_isHideNaviBar) {
-        if (model.type == TZAssetModelMediaTypeVideo) {
+        if (model.type == HGAssetModelMediaTypeVideo) {
             _originalPhotoButton.hidden = YES;
             _originalPhotoLabel.hidden = YES;
         } else {

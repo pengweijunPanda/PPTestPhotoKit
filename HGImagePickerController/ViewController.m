@@ -10,7 +10,7 @@
 #import "HGImagePickerController.h"
 #import "HGImageManager.h"
 
-@interface ViewController ()
+@interface ViewController ()<HGImagePickerControllerDelegate>
 - (IBAction)album:(id)sender;
 - (IBAction)camera:(id)sender;
 

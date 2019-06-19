@@ -617,7 +617,7 @@ static CGFloat itemMargin = 5;
         index = indexPath.item - 1;
     }
     HGAssetModel *model = _models[index];
-    if (model.type == TZAssetModelMediaTypeVideo && !hgImagePickerVc.allowPickingMultipleVideo) {
+    if (model.type == HGAssetModelMediaTypeVideo && !hgImagePickerVc.allowPickingMultipleVideo) {
         if (hgImagePickerVc.selectedModels.count > 0) {
             HGImagePickerController *imagePickerVc = (HGImagePickerController *)self.navigationController;
             [imagePickerVc showAlertWithTitle:[NSBundle hg_localizedStringForKey:@"Can not choose both video and photo"]];
@@ -626,16 +626,18 @@ static CGFloat itemMargin = 5;
             videoPlayerVc.model = model;
             [self.navigationController pushViewController:videoPlayerVc animated:YES];
         }
-    } else if (model.type == TZAssetModelMediaTypePhotoGif && hgImagePickerVc.allowPickingGif && !hgImagePickerVc.allowPickingMultipleVideo) {
-        if (hgImagePickerVc.selectedModels.count > 0) {
-            HGImagePickerController *imagePickerVc = (HGImagePickerController *)self.navigationController;
-            [imagePickerVc showAlertWithTitle:[NSBundle hg_localizedStringForKey:@"Can not choose both photo and GIF"]];
-        } else {
-            HGGifPhotoPreviewController *gifPreviewVc = [[HGGifPhotoPreviewController alloc] init];
-            gifPreviewVc.model = model;
-            [self.navigationController pushViewController:gifPreviewVc animated:YES];
-        }
-    } else {
+    }
+    //    else if (model.type == HGAssetModelMediaTypePhotoGif && hgImagePickerVc.allowPickingGif && !hgImagePickerVc.allowPickingMultipleVideo) {
+    //        if (hgImagePickerVc.selectedModels.count > 0) {
+    //            HGImagePickerController *imagePickerVc = (HGImagePickerController *)self.navigationController;
+    //            [imagePickerVc showAlertWithTitle:[NSBundle hg_localizedStringForKey:@"Can not choose both photo and GIF"]];
+    //        } else {
+    //            HGGifPhotoPreviewController *gifPreviewVc = [[HGGifPhotoPreviewController alloc] init];
+    //            gifPreviewVc.model = model;
+    //            [self.navigationController pushViewController:gifPreviewVc animated:YES];
+    //        }
+    //    }
+    else {
         HGPhotoPreviewController *photoPreviewVc = [[HGPhotoPreviewController alloc] init];
         photoPreviewVc.currentIndex = index;
         photoPreviewVc.models = _models;
@@ -884,7 +886,7 @@ static CGFloat itemMargin = 5;
     }
     
     if (hgImagePickerVc.selectedModels.count < hgImagePickerVc.maxImagesCount) {
-        if (assetModel.type == TZAssetModelMediaTypeVideo && !hgImagePickerVc.allowPickingMultipleVideo) {
+        if (assetModel.type == HGAssetModelMediaTypeVideo && !hgImagePickerVc.allowPickingMultipleVideo) {
             // 不能多选视频的情况下，不选中拍摄的视频
         } else {
             assetModel.isSelected = YES;

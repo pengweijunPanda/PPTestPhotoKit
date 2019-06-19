@@ -14,6 +14,8 @@
 #import "HGImageCropManager.h"
 #import <MediaPlayer/MediaPlayer.h>
 #import "HGImagePickerController.h"
+#import <Photos/Photos.h>
+#import <YYKit/UIImageView+YYWebImage.h>
 
 @implementation HGAssetPreviewCell
 
@@ -134,6 +136,10 @@
         _imageView.clipsToBounds = YES;
         [_imageContainerView addSubview:_imageView];
         
+        _animatedImageView = [YYAnimatedImageView new];;
+        [_imageContainerView addSubview:_animatedImageView];
+        
+        
         UITapGestureRecognizer *tap1 = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(singleTap:)];
         [self addGestureRecognizer:tap1];
         UITapGestureRecognizer *tap2 = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(doubleTap:)];
@@ -156,11 +162,11 @@
     _model = model;
     self.isRequestingGIF = NO;
     [_scrollView setZoomScale:1.0 animated:NO];
-    if (model.type == TZAssetModelMediaTypePhotoGif) {
+    if (model.type == HGAssetModelMediaTypePhotoGif) {
         // 先显示缩略图
         [[HGImageManager manager] getPhotoWithAsset:model.asset completion:^(UIImage *photo, NSDictionary *info, BOOL isDegraded) {
             self.imageView.image = photo;
-            [self resizeSubviews];
+            [self resizeSubviews:photo];
             if (self.isRequestingGIF) {
                 return;
             }
@@ -188,12 +194,23 @@
                     } else {
                         self.imageView.image = [UIImage sd_tz_animatedGIFWithData:data];
                     }
-                    [self resizeSubviews];
+                    [self resizeSubviews:self.imageView.image];
                 }
             }];
         } progressHandler:nil networkAccessAllowed:NO];
     } else {
         self.asset = model.asset;
+    }
+}
+- (BOOL)isGifFromPhotoInfo:(NSDictionary *)info
+{
+#warning PHImageFileUTIKey这玩意是私有API，后续要base64再decode去拿才行，避免被拒
+    NSString *assetString = [info objectForKey:@"PHImageFileUTIKey"];
+    if ([assetString.uppercaseString hasSuffix:@"GIF"]) {
+        //这个图片是GIF图片
+        return YES;
+    } else {
+        return NO;
     }
 }
 
@@ -205,24 +222,34 @@
     _asset = asset;
     self.imageRequestID = [[HGImageManager manager] getPhotoWithAsset:asset completion:^(UIImage *photo, NSDictionary *info, BOOL isDegraded) {
         if (![asset isEqual:self->_asset]) return;
-        self.imageView.image = photo;
-        [self resizeSubviews];
-        if (self.imageView.hg_height && self.allowCrop) {
-            CGFloat scale = MAX(self.cropRect.size.width / self.imageView.hg_width, self.cropRect.size.height / self.imageView.hg_height);
-            if (self.scaleAspectFillCrop && scale > 1) { // 如果设置图片缩放裁剪并且图片需要缩放
-                CGFloat multiple = self.scrollView.maximumZoomScale / self.scrollView.minimumZoomScale;
-                self.scrollView.minimumZoomScale = scale;
-                self.scrollView.maximumZoomScale = scale * MAX(multiple, 2);
-                [self.scrollView setZoomScale:scale animated:YES];
+        if ([self isGifFromPhotoInfo:info]) {
+            [self.animatedImageView setImageURL:info[@"PHImageFileURLKey"]];
+            [self resizeSubviews:photo];
+            self.imageView.hidden = YES;
+            self.animatedImageView.hidden = NO;
+        }else{
+            self.imageView.hidden = NO;
+            self.animatedImageView.hidden = YES;
+            
+            self.imageView.image = photo;
+            [self resizeSubviews:photo];
+            if (self.imageView.hg_height && self.allowCrop) {
+                CGFloat scale = MAX(self.cropRect.size.width / self.imageView.hg_width, self.cropRect.size.height / self.imageView.hg_height);
+                if (self.scaleAspectFillCrop && scale > 1) { // 如果设置图片缩放裁剪并且图片需要缩放
+                    CGFloat multiple = self.scrollView.maximumZoomScale / self.scrollView.minimumZoomScale;
+                    self.scrollView.minimumZoomScale = scale;
+                    self.scrollView.maximumZoomScale = scale * MAX(multiple, 2);
+                    [self.scrollView setZoomScale:scale animated:YES];
+                }
             }
-        }
-
-        self->_progressView.hidden = YES;
-        if (self.imageProgressUpdateBlock) {
-            self.imageProgressUpdateBlock(1);
-        }
-        if (!isDegraded) {
-            self.imageRequestID = 0;
+            
+            self->_progressView.hidden = YES;
+            if (self.imageProgressUpdateBlock) {
+                self.imageProgressUpdateBlock(1);
+            }
+            if (!isDegraded) {
+                self.imageRequestID = 0;
+            }
         }
     } progressHandler:^(double progress, NSError *error, BOOL *stop, NSDictionary *info) {
         if (![asset isEqual:self->_asset]) return;
@@ -245,14 +272,14 @@
 
 - (void)recoverSubviews {
     [_scrollView setZoomScale:_scrollView.minimumZoomScale animated:NO];
-    [self resizeSubviews];
+    [self resizeSubviews:_imageView.image];
 }
 
-- (void)resizeSubviews {
+- (void)resizeSubviews:(UIImage *)sourceImage {
     _imageContainerView.hg_origin = CGPointZero;
     _imageContainerView.hg_width = self.scrollView.hg_width;
     
-    UIImage *image = _imageView.image;
+    UIImage *image = sourceImage;
     if (image.size.height / image.size.width > self.hg_height / self.scrollView.hg_width) {
         _imageContainerView.hg_height = floor(image.size.height / (image.size.width / self.scrollView.hg_width));
     } else {
@@ -270,6 +297,7 @@
     [_scrollView scrollRectToVisible:self.bounds animated:NO];
     _scrollView.alwaysBounceVertical = _imageContainerView.hg_height <= self.hg_height ? NO : YES;
     _imageView.frame = _imageContainerView.bounds;
+    _animatedImageView.frame = _imageContainerView.bounds;
     
     [self refreshScrollViewContentSize];
 }
@@ -476,7 +504,7 @@
 @end
 
 
-@implementation TZGifPreviewCell
+@implementation HGGifPreviewCell
 
 - (void)configSubviews {
     [self configPreviewView];

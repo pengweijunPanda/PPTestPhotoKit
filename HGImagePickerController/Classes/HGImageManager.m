@@ -212,9 +212,9 @@ static dispatch_once_t onceToken;
     
     HGAssetModel *model;
     TZAssetModelMediaType type = [self getAssetType:asset];
-    if (!allowPickingVideo && type == TZAssetModelMediaTypeVideo) return nil;
+    if (!allowPickingVideo && type == HGAssetModelMediaTypeVideo) return nil;
     if (!allowPickingImage && type == TZAssetModelMediaTypePhoto) return nil;
-    if (!allowPickingImage && type == TZAssetModelMediaTypePhotoGif) return nil;
+    if (!allowPickingImage && type == HGAssetModelMediaTypePhotoGif) return nil;
     
     PHAsset *phAsset = (PHAsset *)asset;
     if (self.hideWhenCanNotSelect) {
@@ -223,7 +223,7 @@ static dispatch_once_t onceToken;
             return nil;
         }
     }
-    NSString *timeLength = type == TZAssetModelMediaTypeVideo ? [NSString stringWithFormat:@"%0.0f",phAsset.duration] : @"";
+    NSString *timeLength = type == HGAssetModelMediaTypeVideo ? [NSString stringWithFormat:@"%0.0f",phAsset.duration] : @"";
     timeLength = [self getNewTimeFromDurationSecond:timeLength.integerValue];
     model = [HGAssetModel modelWithAsset:asset type:type timeLength:timeLength];
     return model;
@@ -232,7 +232,7 @@ static dispatch_once_t onceToken;
 - (TZAssetModelMediaType)getAssetType:(PHAsset *)asset {
     TZAssetModelMediaType type = TZAssetModelMediaTypePhoto;
     PHAsset *phAsset = (PHAsset *)asset;
-    if (phAsset.mediaType == PHAssetMediaTypeVideo)      type = TZAssetModelMediaTypeVideo;
+    if (phAsset.mediaType == PHAssetMediaTypeVideo)      type = HGAssetModelMediaTypeVideo;
     else if (phAsset.mediaType == PHAssetMediaTypeAudio) type = TZAssetModelMediaTypeAudio;
     else if (phAsset.mediaType == PHAssetMediaTypeImage) {
         if (@available(iOS 9.1, *)) {
@@ -240,7 +240,7 @@ static dispatch_once_t onceToken;
         }
         // Gif
         if ([[phAsset valueForKey:@"filename"] hasSuffix:@"GIF"]) {
-            type = TZAssetModelMediaTypePhotoGif;
+            type = HGAssetModelMediaTypePhotoGif;
         }
     }
     return type;
@@ -277,11 +277,11 @@ static dispatch_once_t onceToken;
         PHImageRequestOptions *options = [[PHImageRequestOptions alloc] init];
         options.resizeMode = PHImageRequestOptionsResizeModeFast;
         options.networkAccessAllowed = YES;
-        if (model.type == TZAssetModelMediaTypePhotoGif) {
+        if (model.type == HGAssetModelMediaTypePhotoGif) {
             options.version = PHImageRequestOptionsVersionOriginal;
         }
         [[PHImageManager defaultManager] requestImageDataForAsset:model.asset options:options resultHandler:^(NSData *imageData, NSString *dataUTI, UIImageOrientation orientation, NSDictionary *info) {
-            if (model.type != TZAssetModelMediaTypeVideo) dataLength += imageData.length;
+            if (model.type != HGAssetModelMediaTypeVideo) dataLength += imageData.length;
             assetCount ++;
             if (assetCount >= photos.count) {
                 NSString *bytes = [self getBytesFromDataLength:dataLength];
@@ -368,6 +368,7 @@ static dispatch_once_t onceToken;
     // 下面两行代码，来自hsjcom，他的github是：https://github.com/hsjcom 表示感谢
     PHImageRequestOptions *option = [[PHImageRequestOptions alloc] init];
     option.resizeMode = PHImageRequestOptionsResizeModeFast;
+    
     int32_t imageRequestID = [[PHImageManager defaultManager] requestImageForAsset:asset targetSize:imageSize contentMode:PHImageContentModeAspectFill options:option resultHandler:^(UIImage *result, NSDictionary *info) {
         if (result) {
             image = result;
@@ -733,7 +734,7 @@ static dispatch_once_t onceToken;
 
 - (HGAssetModel *)createModelWithAsset:(PHAsset *)asset {
     TZAssetModelMediaType type = [[HGImageManager manager] getAssetType:asset];
-    NSString *timeLength = type == TZAssetModelMediaTypeVideo ? [NSString stringWithFormat:@"%0.0f",asset.duration] : @"";
+    NSString *timeLength = type == HGAssetModelMediaTypeVideo ? [NSString stringWithFormat:@"%0.0f",asset.duration] : @"";
     timeLength = [[HGImageManager manager] getNewTimeFromDurationSecond:timeLength.integerValue];
     HGAssetModel *model = [HGAssetModel modelWithAsset:asset type:type timeLength:timeLength];
     return model;

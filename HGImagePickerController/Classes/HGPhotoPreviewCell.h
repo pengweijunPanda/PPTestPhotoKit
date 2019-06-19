@@ -1,5 +1,5 @@
 //
-//  TZPhotoPreviewCell.h
+//  HGPhotoPreviewCell.h
 //  HGImagePickerController
 //
 //  Created by pengweijun on 2019/6/18.
@@ -7,6 +7,7 @@
 //
 
 #import <UIKit/UIKit.h>
+#import <YYKit/YYAnimatedImageView.h>
 
 @class HGAssetModel;
 @interface HGAssetPreviewCell : UICollectionViewCell
@@ -35,6 +36,7 @@
 
 @interface HGPhotoPreviewView : UIView
 @property (nonatomic, strong) UIImageView *imageView;
+@property (nonatomic, strong) YYAnimatedImageView *animatedImageView;
 @property (nonatomic, strong) UIScrollView *scrollView;
 @property (nonatomic, strong) UIView *imageContainerView;
 @property (nonatomic, strong) HGProgressView *progressView;
@@ -64,6 +66,6 @@
 @end
 
 
-@interface TZGifPreviewCell : HGAssetPreviewCell
+@interface HGGifPreviewCell : HGAssetPreviewCell
 @property (strong, nonatomic) HGPhotoPreviewView *previewView;
 @end

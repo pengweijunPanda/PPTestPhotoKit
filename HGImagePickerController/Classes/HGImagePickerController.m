@@ -161,6 +161,7 @@
         // 默认准许用户选择原图和视频, 你也可以在这个方法后置为NO
         self.allowPickingOriginalPhoto = NO;
         self.allowPickingVideo = NO;
+        self.allowPickingGif = YES;
         self.allowPickingImage = YES;
         self.allowTakePicture = YES;
         self.allowTakeVideo = YES;
